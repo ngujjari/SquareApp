@@ -65,33 +65,33 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
         btnClick1 = (Button) findViewById(R.id.button1) ;
         btnClick1.setOnClickListener(this);
-       // btnClick1.setOnTouchListener(new MyTouchListener());
-      //  btnClick1.setOnDragListener(new MyDragListener());
+        btnClick1.setOnTouchListener(new MyTouchListener());
+        btnClick1.setOnDragListener(new MyDragListener());
 
         btnClick2 = (Button) findViewById(R.id.button2) ;
         btnClick2.setOnClickListener(this);
-      //  btnClick2.setOnTouchListener(new MyTouchListener());
-      //  btnClick2.setOnDragListener(new MyDragListener());
+        btnClick2.setOnTouchListener(new MyTouchListener());
+        btnClick2.setOnDragListener(new MyDragListener());
 
         btnClick3 = (Button) findViewById(R.id.button3) ;
         btnClick3.setOnClickListener(this);
-      //  btnClick3.setOnTouchListener(new MyTouchListener());
-      //  btnClick3.setOnDragListener(new MyDragListener());
+        btnClick3.setOnTouchListener(new MyTouchListener());
+        btnClick3.setOnDragListener(new MyDragListener());
 
         btnClick4 = (Button) findViewById(R.id.button4) ;
         btnClick4.setOnClickListener(this);
-      //  btnClick4.setOnTouchListener(new MyTouchListener());
-       // btnClick4.setOnDragListener(new MyDragListener());
+        btnClick4.setOnTouchListener(new MyTouchListener());
+        btnClick4.setOnDragListener(new MyDragListener());
 
         btnClick5 = (Button) findViewById(R.id.button5) ;
         btnClick5.setOnClickListener(this);
-      //  btnClick5.setOnTouchListener(new MyTouchListener());
-      //  btnClick5.setOnDragListener(new MyDragListener());
+        btnClick5.setOnTouchListener(new MyTouchListener());
+        btnClick5.setOnDragListener(new MyDragListener());
 
         btnClick6 = (Button) findViewById(R.id.button6) ;
         btnClick6.setOnClickListener(this);
-      //  btnClick6.setOnTouchListener(new MyTouchListener());
-      //  btnClick6.setOnDragListener(new MyDragListener());
+        btnClick6.setOnTouchListener(new MyTouchListener());
+        btnClick6.setOnDragListener(new MyDragListener());
 
         btnClick7 = (Button) findViewById(R.id.button7) ;
         btnClick7.setOnClickListener(this);
@@ -100,20 +100,20 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
         btnClick8 = (Button) findViewById(R.id.button8) ;
         btnClick8.setOnClickListener(this);
-      //  btnClick8.setOnTouchListener(new MyTouchListener());
-      //  btnClick8.setOnDragListener(new MyDragListener());
+        btnClick8.setOnTouchListener(new MyTouchListener());
+        btnClick8.setOnDragListener(new MyDragListener());
 
         btnClick9 = (Button) findViewById(R.id.button9) ;
         btnClick9.setOnClickListener(this);
-      //  btnClick9.setOnTouchListener(new MyTouchListener());
-      //  btnClick9.setOnDragListener(new MyDragListener());
+        btnClick9.setOnTouchListener(new MyTouchListener());
+        btnClick9.setOnDragListener(new MyDragListener());
 
         btnClickReset = (Button) findViewById(R.id.buttonReset) ;
         btnClickReset.setOnClickListener(this);
 
 
         animation = new AlphaAnimation(1, 0); // Change alpha from fully visible to invisible
-        animation.setDuration(600); // duration - half a second
+        animation.setDuration(50); // duration - half a second
         animation.setInterpolator(new LinearInterpolator()); // do not alter animation rate
         animation.setRepeatCount(Animation.INFINITE); // Repeat animation infinitely
         animation.setRepeatMode(Animation.REVERSE); // Reverse animation at the end so the button will fade back in
@@ -313,7 +313,6 @@ public class MainActivity extends Activity implements View.OnClickListener{
                 ClipData data = ClipData.newPlainText("", "");
                 View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
                 view.startDrag(data, shadowBuilder, view, 0);
-                //view.setVisibility(View.INVISIBLE);
                 Log.v(TAG, "MyTouchListener onTouch end  true : "+view.getId());
                 return true;
             } else {
@@ -462,38 +461,54 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
     private class MyDragListener implements View.OnDragListener {
         Drawable buttonplayer1 = getResources().getDrawable(R.drawable.buttonplayer1);
+        Drawable buttonplayer2 = getResources().getDrawable(R.drawable.buttonplayer2);
         Drawable greydraggable = getResources().getDrawable(R.drawable.greydraggable);
 
         @Override
         public boolean onDrag(View v, DragEvent event) {
 
             int action = event.getAction();
-            Log.v(TAG, "MyDragListener onTouch begin : "+v.getId() +"  action : "+action);
+           // Log.v(TAG, "MyDragListener onTouch begin : "+v.getId() +"  action : "+action);
             switch (event.getAction()) {
                 case DragEvent.ACTION_DRAG_STARTED:
                     // do nothing
                     break;
                 case DragEvent.ACTION_DRAG_ENTERED:
-                    v.setBackgroundDrawable(greydraggable);
+                   // v.setBackgroundDrawable(greydraggable);
                     break;
                 case DragEvent.ACTION_DRAG_EXITED:
-                    v.setBackgroundDrawable(buttonplayer1);
+                   // v.setBackgroundDrawable(buttonplayer1);
                     break;
                 case DragEvent.ACTION_DROP:
                     // Dropped, reassign View to ViewGroup
-                    Log.v(TAG, "MyDragListener onTouch ACTION_DROP : "+v.getId() +"  action : "+action);
+                   // Log.v(TAG, "MyDragListener onTouch ACTION_DROP : "+v.getId() +"  action : "+action);
 
                    View view = (View) event.getLocalState();
-                   // view
+                    long targetBtnId = view.getId();
+                    Log.v(TAG, "MyDragListener onTouch after ACTION_DROP : source : "+view.getId() +"  target : "+v.getId());
+
+
                     ViewGroup owner = (ViewGroup) view.getParent();
+
+                    Button btnTargetClick = (Button) findViewById(v.getId());
+                    btnTargetClick.setBackground(buttonplayer1);
+
+
+                    Button btnSrcClick = (Button) findViewById(view.getId());
+                    btnSrcClick.setBackground(greydraggable);
+                    //owner.removeView(v);
+                    view.setVisibility(View.VISIBLE);
+                   // view.dispatchTouchEvent(event);
+                   /* ViewGroup owner = (ViewGroup) view.getParent();
                     owner.removeView(view);
                     android.widget.Button btn = (android.widget.Button) v;
                     Log.v(TAG, "MyDragListener onTouch after ACTION_DROP : "+v.getId() +"  action : "+action +"  , btn ID = "+ btn.getId()) ;
                     view.setVisibility(View.VISIBLE);
+                    */
                     break;
                 case DragEvent.ACTION_DRAG_ENDED:
                     //v.setBackgroundDrawable(buttonplayer1);
-                    Log.v(TAG, "MyDragListener onDrag ACTION_DRAG_ENDED : "+v.getId() +"  action : "+action);
+                   // Log.v(TAG, "MyDragListener onDrag ACTION_DRAG_ENDED : "+v.getId() +"  action : "+action);
                 default:
                     break;
             }
