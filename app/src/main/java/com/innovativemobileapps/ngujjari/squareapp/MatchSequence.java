@@ -347,7 +347,9 @@ public class MatchSequence {
                                 + " , "+abList.toArray()[2] +" -> "+remainedMoves((Integer)abList.toArray()[2],tList));
                         //takeInput(player, abList, tList);
                         msgList.clear();
+                        playerAction.reset(player);
                         msgList.add(MatchSequence.MSG_1002);
+                        dragStatus = true;
                         return 1;
                     }
                     abList.remove(new Integer(fromNd));
