@@ -7,9 +7,9 @@
         android:gradientRadius="100"
         android:centerX="0%"
         android:centerY="50%"
-        android:centerColor="#99BEE8"
-        android:startColor="#8DAEC4"
-        android:endColor="#5F7E96"
+        android:centerColor="#3BE835"
+        android:startColor="#6EC449"
+        android:endColor="#489650"
         android:type="radial"
         />
     <padding
