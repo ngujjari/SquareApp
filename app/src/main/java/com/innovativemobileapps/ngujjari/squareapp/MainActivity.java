@@ -50,6 +50,9 @@ public class MainActivity extends Activity implements View.OnClickListener{
     private Button btnClick7;
     private Button btnClick8;
     private Button btnClick9;
+    private TextView toastText;
+    private Toast toast;
+    private View layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +121,17 @@ public class MainActivity extends Activity implements View.OnClickListener{
         animation.setRepeatCount(Animation.INFINITE); // Repeat animation infinitely
         animation.setRepeatMode(Animation.REVERSE); // Reverse animation at the end so the button will fade back in
 
+        // Messages
+        LayoutInflater inflater = getLayoutInflater();
+        layout = inflater.inflate(R.layout.layout2,
+                (ViewGroup) findViewById(R.id.mylinearlayout));
+        toastText = (TextView) layout.findViewById(R.id.toasttext);
+
+
+        toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.setDuration(Toast.LENGTH_LONG);
+
         Log.v(TAG, "onCreate method end :");
     }
 
@@ -163,25 +177,13 @@ public class MainActivity extends Activity implements View.OnClickListener{
     public void onClick(View v)
     {
         Log.v(TAG, " button id : "+v.getId());
-
         String buttonVlu = this.getButtonId(v.getId());
         Log.v(TAG, " buttonVlu : "+buttonVlu);
-
         // Messages
-        LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.layout2,
-                (ViewGroup) findViewById(R.id.mylinearlayout));
-        TextView text = (TextView) layout.findViewById(R.id.toasttext);
-
-
-        Toast toast = new Toast(getApplicationContext());
-        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-        toast.setDuration(Toast.LENGTH_LONG);
-        setMessage(toast, layout,text, "");
+        setMessage(toast, layout,toastText, "");
 
        // MatchSequence ms = null;
         MatchApplication app = (MatchApplication) getApplication();
-
         MatchSequence ms = (app.getMs() != null ) ? app.getMs() : new MatchSequence();
 
         if(buttonVlu.equals("Reset")){
@@ -200,102 +202,19 @@ public class MainActivity extends Activity implements View.OnClickListener{
             if(isPlayerFlipped(buttonVlu) ){
                 ms.player = buttonVlu;
             }
-
-
-
             if(!ms.dragStatus && ms.previousPlayer != null && !ms.previousPlayer.equals("")
                     && ms.player.equals(ms.previousPlayer)){
-                setMessage(toast, layout,text, "Invalid player. Please choose other player.");
+                setMessage(toast, layout,toastText, "Invalid player. Please choose other player.");
                 // Do not execute .. wrong player.... flip the player
                 Log.v(TAG, "Do not execute 1.. wrong player.... flip the player  "+v.getId());
                 return;
             }
         }
         Log.v(TAG, " Begin  : "+ms.flipPlayer+ "=  curr: "+ms.player +"  prev  = "+ms.previousPlayer +"  buttonVlu = "+buttonVlu);
-        /*
-    if(!buttonVlu.startsWith("Player") && !ms.player.equals("")) {
-        boolean executeStep = ms.execute(Integer.parseInt(buttonVlu));
-        Log.v(TAG, " executeStep  : "+executeStep);
-        if (executeStep) {
-            ms.previousPlayer = ms.player;
-           // ms.player = buttonVlu;
-            ms.flipPlayer = true;
-        } else {
-            ms.flipPlayer = false;
 
-        }
-        List<String> msgList = ms.msgList;
-        Set<Integer> aList = ms.aList;
-        Set<Integer> bList = ms.bList;
-
-        if(!(msgList != null && msgList.size() > 0)) {
-            boolean isWonGame = ms.isWon;
-
-
-            if (isWonGame) {
-                setMessage(toast, layout, text, "Congratulations !! "+ms.player + " won the game.");
-                startSuccessAnimation(ms.player, aList, bList);
-
-                Log.v(TAG, ms.player + " WON THE GAME !!!!!!! " + v.getId());
-            }else{
-                for(String msg : ms.msgList) {
-                    setMessage(toast, layout, text, msg);
-                }
-
-            }
-
-
-            setColor(aList, bList);
-        }
-        else
-        {
-            for(String msg : msgList) {
-                Log.v(TAG, ms.player + " Message : " + msg);
-                if(msg.equals(MatchSequence.MSG_1003)){
-                    Resources res = getResources();
-                    Drawable shapePly1 = res. getDrawable(R.drawable.greydraggable);
-                    Button btnClick = (Button) findViewById(buttonMapRev.get(buttonVlu+""));
-                    btnClick.setBackground(shapePly1);
-                   // Button btnClick = (Button) findViewById(buttonMapRev.get(buttonVlu+""));
-                   // btnClick.setBackgroundColor(Color.rgb(120,244,200));
-                }
-                else if(msg.equals(MatchSequence.MSG_1002)){
-                    setColor(aList, bList);
-                    setMessage(toast, layout, text, "Invalid move !!!!");
-                }
-            }
-        }
-    } */
         if(ms.flipPlayer == true || ms.previousPlayer == null || ms.previousPlayer.equals("")){
-
-        Resources res = getResources();
-
-            if(ms.player.equals("Player1")) {
-                Drawable shapePly1 = res. getDrawable(R.drawable.buttonshapeselected);
-                btnClickPly1.setBackground(shapePly1);
-              //  btnClickPly1.setBackgroundResource(R.drawable.new_todo_image);
-
-                Drawable shapePly2 = res. getDrawable(R.drawable.buttonshape);
-                btnClickPly2.setBackground(shapePly2);
-
-              //  btnClickPly1.setBackgroundColor(Color.RED);
-              //  btnClickPly2.setBackgroundColor(Color.GREEN);
-            }
-            else if(ms.player.equals("Player2")){
-                Drawable shapePly1 = res. getDrawable(R.drawable.buttonshape);
-                btnClickPly1.setBackground(shapePly1);
-
-                Drawable shapePly2 = res. getDrawable(R.drawable.buttonshapeselected);
-                btnClickPly2.setBackground(shapePly2);
-               // btnClickPly1.setBackgroundColor(Color.GREEN);
-               // btnClickPly2.setBackgroundColor(Color.RED);
-            }
-            else{
-                setMessage(toast, layout, text, "Please select player.");
-            }
-
+            this.setPlayerBtnBackground(ms.player);
         }
-
 
         Log.v(TAG, " END  : "+ms.flipPlayer+ "=  curr: "+ms.player +"  prev  = "+ms.previousPlayer +"  buttonVlu = "+buttonVlu);
 
@@ -303,7 +222,27 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
     }
 
+    private void setPlayerBtnBackground(String player)
+    {
+        Resources res = getResources();
+        if(player.equals("Player1")) {
+            Drawable shapePly1 = res. getDrawable(R.drawable.buttonshapeselected);
+            btnClickPly1.setBackground(shapePly1);
 
+            Drawable shapePly2 = res. getDrawable(R.drawable.buttonshape);
+            btnClickPly2.setBackground(shapePly2);
+        }
+        else if(player.equals("Player2")){
+            Drawable shapePly1 = res. getDrawable(R.drawable.buttonshape);
+            btnClickPly1.setBackground(shapePly1);
+
+            Drawable shapePly2 = res. getDrawable(R.drawable.buttonshapeselected);
+            btnClickPly2.setBackground(shapePly2);
+        }
+        else{
+            setMessage(toast, layout, toastText, "Please select player.");
+        }
+    }
 
     // This defines your touch listener
     private final class MyTouchListener implements View.OnTouchListener {
@@ -324,16 +263,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
                 Log.v(TAG, " buttonVlu : "+buttonVlu);
 
                 // Messages
-                LayoutInflater inflater = getLayoutInflater();
-                View layout = inflater.inflate(R.layout.layout2,
-                        (ViewGroup) findViewById(R.id.mylinearlayout));
-                TextView text = (TextView) layout.findViewById(R.id.toasttext);
-
-
-                Toast toast = new Toast(getApplicationContext());
-                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-                toast.setDuration(Toast.LENGTH_LONG);
-                setMessage(toast, layout,text, "");
+                setMessage(toast, layout,toastText, "");
 
                 // MatchSequence ms = null;
                 MatchApplication app = (MatchApplication) getApplication();
@@ -357,101 +287,30 @@ public class MainActivity extends Activity implements View.OnClickListener{
                         ms.player = buttonVlu;
                     }
 
-
-
                     if(!ms.dragStatus && ms.previousPlayer != null && !ms.previousPlayer.equals("")
                             && ms.player.equals(ms.previousPlayer)){
-                        setMessage(toast, layout,text, "Invalid player. Please choose other player.");
+                        setMessage(toast, layout,toastText, "Invalid player. Please choose other player.");
                         // Do not execute .. wrong player.... flip the player
                         Log.v(TAG, "onTouch: Do not execute 1.. wrong player.... flip the player  "+view.getId());
                         return false;
                     }
                 }
                 Log.v(TAG, " onTouch Begin  : "+ms.flipPlayer+ "=  curr: "+ms.player +"  prev  = "+ms.previousPlayer +"  buttonVlu = "+buttonVlu);
-                if(!buttonVlu.startsWith("Player") && !ms.player.equals("")) {
+                if(!buttonVlu.startsWith("Player") && !ms.player.equals(""))
+                {
                     boolean executeStep = ms.execute(Integer.parseInt(buttonVlu));
                     Log.v(TAG, " onTouch executeStep  : "+executeStep);
                     if (executeStep) {
                         ms.previousPlayer = ms.player;
-                        // ms.player = buttonVlu;
                         ms.flipPlayer = true;
                     } else {
                         ms.flipPlayer = false;
-
                     }
-                    List<String> msgList = ms.msgList;
-                    Set<Integer> aList = ms.aList;
-                    Set<Integer> bList = ms.bList;
-
-                    if(!(msgList != null && msgList.size() > 0)) {
-                        boolean isWonGame = ms.isWon;
-
-
-                        if (isWonGame) {
-                            setMessage(toast, layout, text, "Congratulations !! "+ms.player + " won the game.");
-                            startSuccessAnimation(ms.player, aList, bList);
-
-                            Log.v(TAG, ms.player + " WON THE GAME !!!!!!! " + view.getId());
-                        }else{
-                            for(String msg : ms.msgList) {
-                                setMessage(toast, layout, text, msg);
-                            }
-
-                        }
-
-
-                        setColor(aList, bList);
-                    }
-                    else
-                    {
-                        for(String msg : msgList) {
-                            Log.v(TAG, ms.player + " Message : " + msg);
-                            if(msg.equals(MatchSequence.MSG_1003)){
-                                Resources res = getResources();
-                                Drawable shapePly1 = res. getDrawable(R.drawable.greydraggable);
-                                Button btnClick = (Button) findViewById(buttonMapRev.get(buttonVlu+""));
-                                btnClick.setBackground(shapePly1);
-                   /* Button btnClick = (Button) findViewById(buttonMapRev.get(buttonVlu+""));
-                    btnClick.setBackgroundColor(Color.rgb(120,244,200));*/
-                            }
-                            else if(msg.equals(MatchSequence.MSG_1002)){
-                                setColor(aList, bList);
-                                setMessage(toast, layout, text, "Invalid move !!!!");
-                            }
-                        }
-                    }
+                    setMessages(ms);
                 }
                 else if(ms.flipPlayer == true || ms.previousPlayer == null || ms.previousPlayer.equals("")){
-
-                    Resources res = getResources();
-
-                    if(ms.player.equals("Player1")) {
-                        Drawable shapePly1 = res. getDrawable(R.drawable.buttonshapeselected);
-                        btnClickPly1.setBackground(shapePly1);
-                        //  btnClickPly1.setBackgroundResource(R.drawable.new_todo_image);
-
-                        Drawable shapePly2 = res. getDrawable(R.drawable.buttonshape);
-                        btnClickPly2.setBackground(shapePly2);
-
-                        //  btnClickPly1.setBackgroundColor(Color.RED);
-                        //  btnClickPly2.setBackgroundColor(Color.GREEN);
-                    }
-                    else if(ms.player.equals("Player2")){
-                        Drawable shapePly1 = res. getDrawable(R.drawable.buttonshape);
-                        btnClickPly1.setBackground(shapePly1);
-
-                        Drawable shapePly2 = res. getDrawable(R.drawable.buttonshapeselected);
-                        btnClickPly2.setBackground(shapePly2);
-                        // btnClickPly1.setBackgroundColor(Color.GREEN);
-                        // btnClickPly2.setBackgroundColor(Color.RED);
-                    }
-                    else{
-                        setMessage(toast, layout, text, "Please select player.");
-                    }
-
+                    setPlayerBtnBackground(ms.player);
                 }
-
-
                 Log.v(TAG, " END  : "+ms.flipPlayer+ "=  curr: "+ms.player +"  prev  = "+ms.previousPlayer +"  buttonVlu = "+buttonVlu);
 
                 return false;
@@ -461,9 +320,6 @@ public class MainActivity extends Activity implements View.OnClickListener{
     }
 
     private class MyDragListener implements View.OnDragListener {
-        Drawable buttonplayer1 = getResources().getDrawable(R.drawable.buttonplayer1);
-        Drawable buttonplayer2 = getResources().getDrawable(R.drawable.buttonplayer2);
-        Drawable greydraggable = getResources().getDrawable(R.drawable.greydraggable);
 
         @Override
         public boolean onDrag(View v, DragEvent event) {
@@ -482,53 +338,27 @@ public class MainActivity extends Activity implements View.OnClickListener{
                     break;
                 case DragEvent.ACTION_DROP:
                     // Dropped, reassign View to ViewGroup
-                   // Log.v(TAG, "MyDragListener onTouch ACTION_DROP : "+v.getId() +"  action : "+action);
+
 
                    View view = (View) event.getLocalState();
-                    long targetBtnId = view.getId();
+
                     Log.v(TAG, "MyDragListener onTouch after ACTION_DROP : source : "+view.getId() +"  target : "+v.getId());
 
-                    Log.v(TAG, "MyTouchListener onTouch end False : "+view.getId());
-                    Log.v(TAG, " button id : "+view.getId());
+                    String fromButton = getButtonId(view.getId());
+                    String toButton = getButtonId(v.getId());
+                    Log.v(TAG, "MyTouchListener onTouch end False : "+view.getId() + " fromButton : "+fromButton +",   toButton = "+toButton);
 
-                    String frombuttonVlu = getButtonId(view.getId());
-                    String tobuttonVlu = getButtonId(v.getId());
-                    Log.v(TAG, " frombuttonVlu : "+frombuttonVlu +",   tobuttonVlu = "+tobuttonVlu);
+                    // Init Toast
+                    setMessage(toast, layout,toastText, "");
 
-                    // Messages
-                    LayoutInflater inflater = getLayoutInflater();
-                    View layout = inflater.inflate(R.layout.layout2,
-                            (ViewGroup) findViewById(R.id.mylinearlayout));
-                    TextView text = (TextView) layout.findViewById(R.id.toasttext);
-
-
-                    Toast toast = new Toast(getApplicationContext());
-                    toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-                    toast.setDuration(Toast.LENGTH_LONG);
-                    setMessage(toast, layout,text, "");
-
-                    // MatchSequence ms = null;
                     MatchApplication app = (MatchApplication) getApplication();
-
                     MatchSequence ms = (app.getMs() != null ) ? app.getMs() : new MatchSequence();
 
-
                     app.setMs(ms);
-                    Log.v(TAG, ms.flipPlayer+ " onDrag method Begin   Button ID : "+view.getId() +"  ,ms.dragStatus = "+ms.dragStatus);
 
-                  /*  if(ms.flipPlayer) {
+                    Log.v(TAG, "onDrag  Begin  : "+ms.flipPlayer+ "=  curr: "+ms.player +"  prev  = "+ms.previousPlayer +"  fromButton = "+Integer.parseInt(fromButton) +" toBtn = "+Integer.parseInt(toButton)+"  ,ms.dragStatus = "+ms.dragStatus);
 
-                        if(!ms.dragStatus && ms.previousPlayer != null && !ms.previousPlayer.equals("")
-                                && ms.player.equals(ms.previousPlayer)){
-                            setMessage(toast, layout,text, "Invalid player. Please choose other player.");
-                            // Do not execute .. wrong player.... flip the player
-                            Log.v(TAG, "onDrag : Do not execute 1.. wrong player.... flip the player  "+view.getId());
-                            return false;
-                        }
-                    } */
-                    Log.v(TAG, "onDrag  Begin  : "+ms.flipPlayer+ "=  curr: "+ms.player +"  prev  = "+ms.previousPlayer +"  frombuttonVlu = "+Integer.parseInt(frombuttonVlu) +" toBtn = "+Integer.parseInt(tobuttonVlu));
-
-                        boolean executeStep = ms.execute(Integer.parseInt(frombuttonVlu), Integer.parseInt(tobuttonVlu));
+                        boolean executeStep = ms.execute(Integer.parseInt(fromButton), Integer.parseInt(toButton));
                         Log.v(TAG, "onDrag  executeStep  : "+executeStep);
                         if (executeStep) {
                             ms.previousPlayer = ms.player;
@@ -538,55 +368,10 @@ public class MainActivity extends Activity implements View.OnClickListener{
                             ms.flipPlayer = false;
 
                         }
-                        List<String> msgList = ms.msgList;
-                        Set<Integer> aList = ms.aList;
-                        Set<Integer> bList = ms.bList;
 
-                        if(!(msgList != null && msgList.size() > 0)) {
-                            boolean isWonGame = ms.isWon;
+                    setMessages(ms);
 
-
-                            if (isWonGame) {
-                                setMessage(toast, layout, text, "Congratulations !! "+ms.player + " won the game.");
-                                startSuccessAnimation(ms.player, aList, bList);
-
-                                Log.v(TAG, ms.player + " WON THE GAME !!!!!!! " + view.getId());
-                            }else{
-                                for(String msg : ms.msgList) {
-                                    setMessage(toast, layout, text, msg);
-                                }
-
-                            }
-
-
-                            setColor(aList, bList);
-                        }
-                        else
-                        {
-                            for(String msg : msgList) {
-                                Log.v(TAG, ms.player + " Message : " + msg);
-                               if(msg.equals(MatchSequence.MSG_1002)){
-                                    setColor(aList, bList);
-                                    setMessage(toast, layout, text, "Invalid move !!!!");
-                                }
-                            }
-                        }
-
-
-
-
-                    Log.v(TAG, " END  : "+ms.flipPlayer+ "=  curr: "+ms.player +"  prev  = "+ms.previousPlayer +"  buttonVlu = "+Integer.parseInt(tobuttonVlu));
-
-
-                    ViewGroup owner = (ViewGroup) view.getParent();
-
-                    //Button btnTargetClick = (Button) findViewById(v.getId());
-                   // btnTargetClick.setBackground(buttonplayer1);
-
-
-                   // Button btnSrcClick = (Button) findViewById(view.getId());
-                   // btnSrcClick.setBackground(greydraggable);
-                    //owner.removeView(v);
+                    Log.v(TAG, " END  : "+ms.flipPlayer+ "=  curr: "+ms.player +"  prev  = "+ms.previousPlayer +"  buttonVlu = "+Integer.parseInt(toButton));
                     view.setVisibility(View.VISIBLE);
                    // view.dispatchTouchEvent(event);
 
@@ -597,11 +382,48 @@ public class MainActivity extends Activity implements View.OnClickListener{
                 default:
                     break;
             }
-            Log.v(TAG, "MyDragListener onTouch end : "+v.getId() +"  action : "+action);
+            Log.v(TAG, "MyDragListener onTouch end : " + v.getId() + "  action : " + action);
             return true;
         }
     }
 
+    private void setMessages( MatchSequence ms)
+    {
+        List<String> msgList = ms.msgList;
+        Set<Integer> aList = ms.aList;
+        Set<Integer> bList = ms.bList;
+
+        if(!(msgList != null && msgList.size() > 0)) {
+            boolean isWonGame = ms.isWon;
+
+
+            if (isWonGame) {
+                setMessage(toast, layout, toastText, "Congratulations !! "+ms.player + " won the game.");
+                startSuccessAnimation(ms.player, aList, bList);
+
+                Log.v(TAG, ms.player + " WON THE GAME !!!!!!! ");
+            }else{
+                for(String msg : ms.msgList) {
+                    setMessage(toast, layout, toastText, msg);
+                }
+
+            }
+
+
+            setColor(aList, bList);
+        }
+        else
+        {
+            for(String msg : msgList) {
+                Log.v(TAG, ms.player + " Message : " + msg);
+                if(msg.equals(MatchSequence.MSG_1002)){
+                    setColor(aList, bList);
+                    setMessage(toast, layout, toastText, "Invalid move !!!!");
+                }
+            }
+        }
+
+    }
     private void startSuccessAnimation(String player, Set<Integer> aList,  Set<Integer> bList)
     {
 
