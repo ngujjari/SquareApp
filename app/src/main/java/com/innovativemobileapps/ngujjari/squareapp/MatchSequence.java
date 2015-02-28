@@ -135,7 +135,7 @@ public class MatchSequence {
                 int fromNd = Integer.parseInt(tokens.nextToken());
                 int toNd = Integer.parseInt(tokens.nextToken());
 
-
+                Log.v(TAG,player+" : moved pawn from "+fromNd +" to " + toNd);
 
                 if(abList.contains(new Integer(fromNd)) && setA.contains(new Integer(toNd)))
                 {
@@ -304,6 +304,92 @@ public class MatchSequence {
         }
 
     }
+    public int validateInput(int a, int b, String player, Set<Integer> abList, List<Integer> tList)
+    {
+
+        Set<Integer> setA = new HashSet(Arrays.asList(nodes));
+        Set<Integer> setB = new HashSet(tList);
+        setA.removeAll(setB);
+        Log.v(TAG,player+" : move pawn from "+abList.toString() +" to " + setA.toString() );
+
+
+
+        //   StringTokenizer tokens = new StringTokenizer(s, ",");
+
+        try{
+            ActionTakenBean playerAction = actionTakenBeanHashMap.get(player);
+            if(playerAction == null) playerAction = new ActionTakenBean(player, -1, -1);
+            playerAction.reset(player);
+            takeInput(a, player);
+            takeInput(b, player);
+            playerAction = actionTakenBeanHashMap.get(player);
+            int fromNd = playerAction.getFromNd();
+            int toNd = playerAction.getToNd();
+
+            // int fromNd = Integer.parseInt(tokens.nextToken());
+            // int toNd = Integer.parseInt(tokens.nextToken());
+            Log.v(TAG,"From  Node = "+fromNd + " To Node = "+toNd);
+
+            if(toNd < 0)
+            {
+                Log.v(TAG,"SELECT TO Node ........................");
+                dragStatus = true;
+                msgList.clear();
+                msgList.add(MatchSequence.MSG_1003);
+                return 1;
+            }
+            else if(fromNd == toNd) {
+                return 0;
+            }
+            else if(abList.contains(new Integer(fromNd)) && setA.contains(new Integer(toNd)))
+            {
+                Log.v(TAG,"Valid input");
+
+                if(!isValidMove(fromNd, toNd))
+                {
+
+                    Log.v(TAG,"Invalid Move !! valid moves are .. "+abList.toArray()[0] +" -> " + remainedMoves((Integer)abList.toArray()[0],tList)
+                            + " , "+abList.toArray()[1] +" -> "+remainedMoves((Integer)abList.toArray()[1],tList)
+                            + " , "+abList.toArray()[2] +" -> "+remainedMoves((Integer)abList.toArray()[2],tList));
+                    //takeInput(player, abList, tList);
+                    msgList.clear();
+                    playerAction.reset(player);
+                    msgList.add(MatchSequence.MSG_1002);
+                    dragStatus = true;
+                    return 1;
+                }
+                abList.remove(new Integer(fromNd));
+                abList.add(new Integer(toNd));
+                msgList.clear();
+                dragStatus = false;
+            }
+            else
+            {
+                Log.v(TAG,player+" : InValid input try again !!");
+                //takeInput(player, abList, tList);
+                msgList.clear();
+                if(fromNd != toNd) {
+                    msgList.add(MatchSequence.MSG_1002);
+                }
+                return 1;
+            }
+
+        }
+        catch(NumberFormatException e)
+        {
+            Log.v(TAG,player+" : Invalid input enter again !!" );
+            //takeInput(player, abList, tList);
+            msgList.clear();
+
+            msgList.add(MatchSequence.MSG_1002);
+            return 1;
+        }
+
+        // return Integer.parseInt(s);
+
+        return 0;
+    }
+
     public int validateInput(int a, String player, Set<Integer> abList, List<Integer> tList)
     {
 
@@ -325,7 +411,7 @@ public class MatchSequence {
 
                // int fromNd = Integer.parseInt(tokens.nextToken());
                 // int toNd = Integer.parseInt(tokens.nextToken());
-
+                Log.v(TAG,"From  Node = "+fromNd + " To Node = "+toNd);
 
                 if(toNd < 0)
                 {
@@ -337,9 +423,12 @@ public class MatchSequence {
                 }
                 else if(abList.contains(new Integer(fromNd)) && setA.contains(new Integer(toNd)))
                 {
-                     Log.v(TAG,"Valid input");
-
-                    if(!isValidMove(fromNd, toNd))
+                     Log.v(TAG,"Valid input  fromNd "+fromNd + "  toNd =  "+toNd);
+                    if(fromNd == toNd)
+                    {
+                        return 0;
+                    }
+                    else if(!isValidMove(fromNd, toNd))
                     {
 
                          Log.v(TAG,"Invalid Move !! valid moves are .. "+abList.toArray()[0] +" -> " + remainedMoves((Integer)abList.toArray()[0],tList)
@@ -385,10 +474,12 @@ public class MatchSequence {
     {
 
         //int a = 1;
+        msgList.clear();
         actionSuccess = false;
         if(tList.size() < 6)
         {
            // a = this.takeInput(player);
+
             if(!validateInput(a))
             {
                 actionSuccess = false;
@@ -438,6 +529,43 @@ public class MatchSequence {
         }
         actionSuccess = true;
        // player = player.equals("Player2") ? "Player1" : "Player2";
+        return actionSuccess;
+    }
+
+    public boolean execute(int a, int b)
+    {
+
+        //int a = 1;
+        actionSuccess = false;
+        if(tList.size() < 6)
+        {
+            msgList.clear();
+            //msgList.add("execute: INvalid move !!");
+
+        }
+        else
+        {
+            Log.v(TAG,"Lets play the game !!! !!!!");
+            msgList.clear();
+            Set<Integer> abList =  player.equals("Player2") ? bList : aList;
+            int validateInputReturn = validateInput(a,b, player, abList, tList );
+            if(validateInputReturn != 0)
+            {
+                actionSuccess = false;
+                Log.v(TAG," Msg Size:  " + msgList.size()  );
+                // msgList.add(MSG_1002);
+                return actionSuccess;
+            }
+
+            isWon = player.equals("Player2") ? isWon("Player2",bList) : isWon("Player1",aList);
+            tList.clear();
+            actionTakenBeanHashMap.clear();
+            tList.addAll(aList);
+            tList.addAll(bList);
+
+        }
+        actionSuccess = true;
+        // player = player.equals("Player2") ? "Player1" : "Player2";
         return actionSuccess;
     }
 
