@@ -20,7 +20,9 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,18 +40,18 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
     Animation animation;
     private Button btnClick;
-    private Button btnClickPly1;
-    private Button btnClickPly2;
-    private Button btnClickReset;
-    private Button btnClick1;
-    private Button btnClick2;
-    private Button btnClick3;
-    private Button btnClick4;
-    private Button btnClick5;
-    private Button btnClick6;
-    private Button btnClick7;
-    private Button btnClick8;
-    private Button btnClick9;
+    private ImageButton btnClickPly1;
+    private ImageButton btnClickPly2;
+    private ImageButton btnClickReset;
+    private ImageButton btnClick1;
+    private ImageButton btnClick2;
+    private ImageButton btnClick3;
+    private ImageButton btnClick4;
+    private ImageButton btnClick5;
+    private ImageButton btnClick6;
+    private ImageButton btnClick7;
+    private ImageButton btnClick8;
+    private ImageButton btnClick9;
     private TextView toastText;
     private Toast toast;
     private View layout;
@@ -59,59 +61,59 @@ public class MainActivity extends Activity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout2);
 
-        btnClickPly1 = (Button) findViewById(R.id.player1Btn) ;
+        btnClickPly1 = (ImageButton) findViewById(R.id.player1Btn) ;
         btnClickPly1.setOnClickListener(this);
 
-        btnClickPly2 = (Button) findViewById(R.id.player2Btn) ;
+        btnClickPly2 = (ImageButton) findViewById(R.id.player2Btn) ;
         btnClickPly2.setOnClickListener(this);
 
 
-        btnClick1 = (Button) findViewById(R.id.button1) ;
+        btnClick1 = (ImageButton) findViewById(R.id.button1) ;
         //btnClick1.setOnClickListener(this);
         btnClick1.setOnTouchListener(new MyTouchListener());
         btnClick1.setOnDragListener(new MyDragListener());
 
-        btnClick2 = (Button) findViewById(R.id.button2) ;
+        btnClick2 = (ImageButton) findViewById(R.id.button2) ;
        // btnClick2.setOnClickListener(this);
         btnClick2.setOnTouchListener(new MyTouchListener());
         btnClick2.setOnDragListener(new MyDragListener());
 
-        btnClick3 = (Button) findViewById(R.id.button3) ;
+        btnClick3 = (ImageButton) findViewById(R.id.button3) ;
        //// btnClick3.setOnClickListener(this);
         btnClick3.setOnTouchListener(new MyTouchListener());
         btnClick3.setOnDragListener(new MyDragListener());
 
-        btnClick4 = (Button) findViewById(R.id.button4) ;
+        btnClick4 = (ImageButton) findViewById(R.id.button4) ;
        // btnClick4.setOnClickListener(this);
         btnClick4.setOnTouchListener(new MyTouchListener());
         btnClick4.setOnDragListener(new MyDragListener());
 
-        btnClick5 = (Button) findViewById(R.id.button5) ;
+        btnClick5 = (ImageButton) findViewById(R.id.button5) ;
        // btnClick5.setOnClickListener(this);
         btnClick5.setOnTouchListener(new MyTouchListener());
         btnClick5.setOnDragListener(new MyDragListener());
 
-        btnClick6 = (Button) findViewById(R.id.button6) ;
+        btnClick6 = (ImageButton) findViewById(R.id.button6) ;
        // btnClick6.setOnClickListener(this);
         btnClick6.setOnTouchListener(new MyTouchListener());
         btnClick6.setOnDragListener(new MyDragListener());
 
-        btnClick7 = (Button) findViewById(R.id.button7) ;
+        btnClick7 = (ImageButton) findViewById(R.id.button7) ;
         //btnClick7.setOnClickListener(this);
         btnClick7.setOnTouchListener(new MyTouchListener());
         btnClick7.setOnDragListener(new MyDragListener());
 
-        btnClick8 = (Button) findViewById(R.id.button8) ;
+        btnClick8 = (ImageButton) findViewById(R.id.button8) ;
        // btnClick8.setOnClickListener(this);
         btnClick8.setOnTouchListener(new MyTouchListener());
         btnClick8.setOnDragListener(new MyDragListener());
 
-        btnClick9 = (Button) findViewById(R.id.button9) ;
+        btnClick9 = (ImageButton) findViewById(R.id.button9) ;
         //btnClick9.setOnClickListener(this);
         btnClick9.setOnTouchListener(new MyTouchListener());
         btnClick9.setOnDragListener(new MyDragListener());
 
-        btnClickReset = (Button) findViewById(R.id.buttonReset) ;
+        btnClickReset = (ImageButton) findViewById(R.id.buttonReset) ;
         btnClickReset.setOnClickListener(this);
 
 
@@ -225,18 +227,23 @@ public class MainActivity extends Activity implements View.OnClickListener{
     private void setPlayerBtnBackground(String player)
     {
         Resources res = getResources();
+
         if(player.equals("Player1")) {
             Drawable shapePly1 = res. getDrawable(R.drawable.buttonshapeselected);
+            btnClickPly1.setImageResource(R.drawable.crickettoon);
             btnClickPly1.setBackground(shapePly1);
 
             Drawable shapePly2 = res. getDrawable(R.drawable.buttonshape);
+            btnClickPly2.setImageResource(R.drawable.soccergirl);
             btnClickPly2.setBackground(shapePly2);
         }
         else if(player.equals("Player2")){
             Drawable shapePly1 = res. getDrawable(R.drawable.buttonshape);
+            btnClickPly1.setImageResource(R.drawable.crickettoon);
             btnClickPly1.setBackground(shapePly1);
 
             Drawable shapePly2 = res. getDrawable(R.drawable.buttonshapeselected);
+            btnClickPly2.setImageResource(R.drawable.soccergirl);
             btnClickPly2.setBackground(shapePly2);
         }
         else{
@@ -349,7 +356,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
                     Log.v(TAG, "MyTouchListener onTouch end False : "+view.getId() + " fromButton : "+fromButton +",   toButton = "+toButton);
 
                     // Init Toast
-                    setMessage(toast, layout,toastText, "");
+                    setMessage(toast, layout, toastText, "");
 
                     MatchApplication app = (MatchApplication) getApplication();
                     MatchSequence ms = (app.getMs() != null ) ? app.getMs() : new MatchSequence();
@@ -431,7 +438,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
         for (Integer node : abList)
         {
             Log.v(TAG, " Success Nodes  " + node +" =  "+buttonMapRev.get(node+""));
-            Button btnClick = (Button) findViewById(buttonMapRev.get(node+""));
+            ImageButton btnClick = (ImageButton) findViewById(buttonMapRev.get(node+""));
             //Resources res = getResources();
             //Drawable shape = res. getDrawable(R.drawable.buttonplayer1);
             // btnClick.setBackground();;
@@ -447,8 +454,15 @@ public class MainActivity extends Activity implements View.OnClickListener{
         for (Integer node : aList)
         {
             Log.v(TAG, " A SetColor Node  " + node +" =  "+buttonMapRev.get(node+""));
-            Button btnClick = (Button) findViewById(buttonMapRev.get(node+""));
+            ImageButton btnClick = (ImageButton) findViewById(buttonMapRev.get(node+""));
             Resources res = getResources();
+            btnClick.setImageResource(R.drawable.cricket01);
+            // b1.setText(adapt_objmenu.city_name_array[i]);
+            //RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+              //  lp.addRule(RelativeLayout.RIGHT_OF, btnClick.getId() - 1);
+
+            //btnClick.setLayoutParams(lp);
             Drawable shape = res. getDrawable(R.drawable.buttonplayer1);
            // btnClick.setBackground();;
             btnClick.setBackground(shape);
@@ -458,11 +472,20 @@ public class MainActivity extends Activity implements View.OnClickListener{
             Log.v(TAG, " B SetColor Node  " + node +" = "+buttonMapRev.get(node+""));
             /*Button btnClick = (Button) findViewById(buttonMapRev.get(node+""));
             btnClick.setBackgroundColor(Color.CYAN);*/
-            Button btnClick = (Button) findViewById(buttonMapRev.get(node+""));
+            ImageButton btnClick = (ImageButton) findViewById(buttonMapRev.get(node+""));
             Resources res = getResources();
-            Drawable shape = res. getDrawable(R.drawable.buttonplayer2);
+            btnClick.setImageResource(R.drawable.soccerball);
+            // b1.setText(adapt_objmenu.city_name_array[i]);
+           // RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+            //lp.addRule(RelativeLayout.RIGHT_OF, btnClick.getId() - 1);
+
+            //btnClick.setLayoutParams(lp);
+            //Drawable shape = res. getDrawable(R.drawable.buttonplayer2);
             // btnClick.setBackground();;
-            btnClick.setBackground(shape);
+
+            //btnClick.setBackground(shape);
+
         }
 
 
@@ -473,7 +496,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
             Log.v(TAG, " Default SetColor Node  " + node +" = "+buttonMapRev.get(node+""));
             /*Button btnClick = (Button) findViewById(buttonMapRev.get(node+""));
             btnClick.setBackgroundColor(Color.LTGRAY);*/
-            Button btnClick = (Button) findViewById(buttonMapRev.get(node+""));
+            ImageButton btnClick = (ImageButton) findViewById(buttonMapRev.get(node+""));
             Resources res = getResources();
             Drawable shape = res. getDrawable(R.drawable.grey);
             btnClick.setBackground(shape);
