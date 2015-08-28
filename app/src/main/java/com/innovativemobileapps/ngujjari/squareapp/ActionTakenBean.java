@@ -46,6 +46,10 @@ public class ActionTakenBean {
         this.toNd = toNd;
     }
 
+    public String toString()
+    {
+        return "player == "+player +" fromNd== "+fromNd+" toNd== "+toNd;
+    }
 
 
 
