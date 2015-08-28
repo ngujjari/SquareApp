@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:id="@+id/mylinearlayout"
     android:theme="@android:style/Theme.Holo"
-    android:touchscreenBlocksFocus="true"
+
     tools:context=".MainActivity"
     android:background="@drawable/backgroundstyle">
 
@@ -179,8 +179,7 @@
             <TableRow
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:minHeight="@dimen/myspaceBar"
-                android:nestedScrollingEnabled="false"></TableRow>
+                android:minHeight="@dimen/myspaceBar"></TableRow>
 
             <TableRow
                 android:layout_width="fill_parent"

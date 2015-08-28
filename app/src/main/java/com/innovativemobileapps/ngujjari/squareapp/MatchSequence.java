@@ -574,6 +574,7 @@ public class MatchSequence {
 
 
         MatchSequence ms = new MatchSequence();
+        ms.execute(1);
         //ms.runAlg();
     }
 }

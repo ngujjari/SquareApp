@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.content.res.XmlResourceParser;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -26,6 +27,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -55,6 +59,8 @@ public class MainActivity extends Activity implements View.OnClickListener{
     private TextView toastText;
     private Toast toast;
     private View layout;
+
+    private XmlResourceParser xmlParser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,6 +139,8 @@ public class MainActivity extends Activity implements View.OnClickListener{
         toast = new Toast(getApplicationContext());
         toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
         toast.setDuration(Toast.LENGTH_LONG);
+        Resources res = this.getResources();
+        xmlParser  = res.getXml(R.xml.gameresults);
 
         Log.v(TAG, "onCreate method end :");
     }
@@ -308,11 +316,11 @@ public class MainActivity extends Activity implements View.OnClickListener{
                     boolean executeStep = ms.execute(Integer.parseInt(buttonVlu));
                     Log.v(TAG, " onTouch executeStep  : "+executeStep);
                     if (executeStep) {
-                        ms.previousPlayer = ms.player;
-                        ms.flipPlayer = true;
                     } else {
                         ms.flipPlayer = false;
                     }
+                        ms.previousPlayer = ms.player;
+                        ms.flipPlayer = true;
                     setMessages(ms);
                 }
                 else if(ms.flipPlayer == true || ms.previousPlayer == null || ms.previousPlayer.equals("")){
@@ -407,7 +415,13 @@ public class MainActivity extends Activity implements View.OnClickListener{
             if (isWonGame) {
                 setMessage(toast, layout, toastText, "Congratulations !! "+ms.player + " won the game.");
                 startSuccessAnimation(ms.player, aList, bList);
-
+                try {
+                    xmlParser.next();
+                } catch (XmlPullParserException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 Log.v(TAG, ms.player + " WON THE GAME !!!!!!! ");
             }else{
                 for(String msg : ms.msgList) {
