@@ -44,9 +44,9 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
     Animation animation;
     private Button btnClick;
-    private ImageButton btnClickPly1;
-    private ImageButton btnClickPly2;
-    private ImageButton btnClickReset;
+   // private ImageButton btnClickPly1;
+  //  private ImageButton btnClickPly2;
+    private Button btnClickReset;
     private ImageButton btnClick1;
     private ImageButton btnClick2;
     private ImageButton btnClick3;
@@ -59,19 +59,25 @@ public class MainActivity extends Activity implements View.OnClickListener{
     private TextView toastText;
     private Toast toast;
     private View layout;
+    private boolean highLevel = true;
 
     private XmlResourceParser xmlParser;
+    LinearLayout L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout2);
-
+        setContentView(R.layout.responsive);
+/*
         btnClickPly1 = (ImageButton) findViewById(R.id.player1Btn) ;
         btnClickPly1.setOnClickListener(this);
 
         btnClickPly2 = (ImageButton) findViewById(R.id.player2Btn) ;
         btnClickPly2.setOnClickListener(this);
+*/
+       // L=(LinearLayout)findViewById(R.id.ll2);
+
+       // L.setLayoutParams(new LinearLayout.LayoutParams(1080, 400));
 
 
         btnClick1 = (ImageButton) findViewById(R.id.button1) ;
@@ -119,7 +125,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
         btnClick9.setOnTouchListener(new MyTouchListener());
         btnClick9.setOnDragListener(new MyDragListener());
 
-        btnClickReset = (ImageButton) findViewById(R.id.buttonReset) ;
+        btnClickReset = (Button) findViewById(R.id.buttonReset) ;
         btnClickReset.setOnClickListener(this);
 
 
@@ -139,8 +145,8 @@ public class MainActivity extends Activity implements View.OnClickListener{
         toast = new Toast(getApplicationContext());
         toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
         toast.setDuration(Toast.LENGTH_LONG);
-        Resources res = this.getResources();
-        xmlParser  = res.getXml(R.xml.gameresults);
+       // Resources res = this.getResources();
+       // xmlParser  = res.getXml(R.xml.gameresults);
 
         Log.v(TAG, "onCreate method end :");
     }
@@ -186,6 +192,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
     }
     public void onClick(View v)
     {
+
         Log.v(TAG, " button id : "+v.getId());
         String buttonVlu = this.getButtonId(v.getId());
         Log.v(TAG, " buttonVlu : "+buttonVlu);
@@ -200,14 +207,17 @@ public class MainActivity extends Activity implements View.OnClickListener{
             Log.v(TAG, " Reset Clicked !!! ");
             ms = new MatchSequence();
             app.setMs(ms);
-            Intent intent = getIntent();
-            finish();
-            startActivity(intent);
+            this.setColor(new HashSet<Integer>(), new HashSet<Integer>());
+            stopSuccessAnimation();
+          //  Intent intent = getIntent();
+          //  finish();
+          //  startActivity(intent);
             return;
         }
         app.setMs(ms);
+        ms.player = "Player1";
         Log.v(TAG, ms.flipPlayer+ " onClick method Begin   Button ID : "+v.getId());
-
+/*
         if(ms.flipPlayer) {
             if(isPlayerFlipped(buttonVlu) ){
                 ms.player = buttonVlu;
@@ -225,7 +235,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
         if(ms.flipPlayer == true || ms.previousPlayer == null || ms.previousPlayer.equals("")){
             this.setPlayerBtnBackground(ms.player);
         }
-
+*/
         Log.v(TAG, " END  : "+ms.flipPlayer+ "=  curr: "+ms.player +"  prev  = "+ms.previousPlayer +"  buttonVlu = "+buttonVlu);
 
         return;
@@ -234,6 +244,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
     private void setPlayerBtnBackground(String player)
     {
+        /*
         Resources res = getResources();
 
         if(player.equals("Player1")) {
@@ -257,6 +268,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
         else{
             setMessage(toast, layout, toastText, "Please select player.");
         }
+        */
     }
 
     // This defines your touch listener
@@ -295,22 +307,23 @@ public class MainActivity extends Activity implements View.OnClickListener{
                      return false;
                 }
                 app.setMs(ms);
-                Log.v(TAG, ms.flipPlayer+ " onTouch method Begin   Button ID : "+view.getId());
-
+                Log.v(TAG, ms.flipPlayer + " onTouch method Begin   Button ID : " + view.getId());
+                ms.player = "Player1";
                 if(ms.flipPlayer) {
                     if(isPlayerFlipped(buttonVlu) ){
                         ms.player = buttonVlu;
                     }
-
+/*
                     if(!ms.dragStatus && ms.previousPlayer != null && !ms.previousPlayer.equals("")
                             && ms.player.equals(ms.previousPlayer)){
                         setMessage(toast, layout,toastText, "Invalid player. Please choose other player.");
                         // Do not execute .. wrong player.... flip the player
                         Log.v(TAG, "onTouch: Do not execute 1.. wrong player.... flip the player  "+view.getId());
                         return false;
-                    }
+                    } */
                 }
-                Log.v(TAG, " onTouch Begin  : "+ms.flipPlayer+ "=  curr: "+ms.player +"  prev  = "+ms.previousPlayer +"  buttonVlu = "+buttonVlu);
+
+                Log.v(TAG, " onTouch Begin  : " + ms.flipPlayer + "=  curr: " + ms.player + "  prev  = " + ms.previousPlayer + "  buttonVlu = " + buttonVlu);
                 if(!buttonVlu.startsWith("Player") && !ms.player.equals(""))
                 {
                     boolean executeStep = ms.execute(Integer.parseInt(buttonVlu));
@@ -321,12 +334,48 @@ public class MainActivity extends Activity implements View.OnClickListener{
                     }
                         ms.previousPlayer = ms.player;
                         ms.flipPlayer = true;
+
+                    if(!(ms.msgList != null && ms.msgList.size() > 0)) {
+                        boolean isWonGame = ms.isWon;
+                        if(isWonGame == false){
+                            ms.player = "Player2";
+
+                            executeStep = true;
+                            while(executeStep)
+                            {
+
+                                if(ms.tList.size() < 6)
+                                {
+
+                                        int toNd = ms.predictUserinput("singleNd", ms.player);
+                                        if (toNd == -1) {
+                                            toNd = ms.getRandomNum();
+                                        }
+
+                                        Log.v(TAG, "runAlg toNd before execute == " + toNd + " " + " from palyer = " + ms.player);
+                                    executeStep = ms.execute(toNd);
+                                }
+                                else
+                                {
+                                    Log.v(TAG, "MyTouchListener: runAlg Lets play the game !!! !!!!  player = " + ms.player);
+                                    ActionTakenBean userInput =  ms.predictUserinput(ms.player);
+                                    executeStep = ms.execute(userInput.getFromNd(), userInput.getToNd());
+                                    //break;
+
+                                }
+
+                                executeStep = (executeStep == true)  ? false : true;
+                            }
+
+                        }
+                    }
+
                     setMessages(ms);
                 }
-                else if(ms.flipPlayer == true || ms.previousPlayer == null || ms.previousPlayer.equals("")){
+                else if(ms.flipPlayer == true || ms.previousPlayer == null || ms.previousPlayer.equals("")) {
                     setPlayerBtnBackground(ms.player);
                 }
-                Log.v(TAG, " END  : "+ms.flipPlayer+ "=  curr: "+ms.player +"  prev  = "+ms.previousPlayer +"  buttonVlu = "+buttonVlu);
+                Log.v(TAG, " END  : " + ms.flipPlayer + "=  curr: " + ms.player + "  prev  = " + ms.previousPlayer + "  buttonVlu = " + buttonVlu);
 
                 return false;
             }
@@ -372,20 +421,55 @@ public class MainActivity extends Activity implements View.OnClickListener{
                     app.setMs(ms);
 
                     Log.v(TAG, "onDrag  Begin  : "+ms.flipPlayer+ "=  curr: "+ms.player +"  prev  = "+ms.previousPlayer +"  fromButton = "+Integer.parseInt(fromButton) +" toBtn = "+Integer.parseInt(toButton)+"  ,ms.dragStatus = "+ms.dragStatus);
-
+                    if(ms.player.equals("Player1") && !fromButton.equals(toButton)) {
                         boolean executeStep = ms.execute(Integer.parseInt(fromButton), Integer.parseInt(toButton));
-                        Log.v(TAG, "onDrag  executeStep  : "+executeStep);
+                        Log.v(TAG, "onDrag  executeStep  : " + executeStep);
                         if (executeStep) {
                             ms.previousPlayer = ms.player;
                             // ms.player = buttonVlu;
                             ms.flipPlayer = true;
+
+                            if (!(ms.msgList != null && ms.msgList.size() > 0)) {
+                                boolean isWonGame = ms.isWon;
+                                if (isWonGame == false) {
+                                    ms.player = "Player2";
+
+                                    executeStep = true;
+                                    while (executeStep) {
+
+                                        if (ms.tList.size() < 6) {
+
+                                            int toNd = ms.predictUserinput("singleNd", ms.player);
+                                            if (toNd == -1) {
+                                                toNd = ms.getRandomNum();
+                                            }
+
+                                            Log.v(TAG, "runAlg toNd before execute == " + toNd + " " + " from palyer = " + ms.player);
+                                            executeStep = ms.execute(toNd);
+                                        } else {
+                                            ActionTakenBean userInput = ms.predictUserinput(ms.player);
+                                            Log.v(TAG, "MyDragListener :runAlg Lets play the game !!! !!!!  player = " + ms.player +" from = "+userInput.getFromNd() +" toNd = "+userInput.getToNd());
+
+                                            executeStep = ms.execute(userInput.getFromNd() , userInput.getToNd());
+                                            //break;
+
+                                        }
+
+                                        executeStep = (executeStep == true) ? false : true;
+                                    }
+
+
+                                }
+                            }
+
+
                         } else {
                             ms.flipPlayer = false;
 
                         }
 
-                    setMessages(ms);
-
+                        setMessages(ms);
+                    }
                     Log.v(TAG, " END  : "+ms.flipPlayer+ "=  curr: "+ms.player +"  prev  = "+ms.previousPlayer +"  buttonVlu = "+Integer.parseInt(toButton));
                     view.setVisibility(View.VISIBLE);
                    // view.dispatchTouchEvent(event);
@@ -415,13 +499,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
             if (isWonGame) {
                 setMessage(toast, layout, toastText, "Congratulations !! "+ms.player + " won the game.");
                 startSuccessAnimation(ms.player, aList, bList);
-                try {
-                    xmlParser.next();
-                } catch (XmlPullParserException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
                 Log.v(TAG, ms.player + " WON THE GAME !!!!!!! ");
             }else{
                 for(String msg : ms.msgList) {
@@ -461,6 +539,24 @@ public class MainActivity extends Activity implements View.OnClickListener{
         }
     }
 
+    private void stopSuccessAnimation()
+    {
+
+        Set<Integer> abList = new HashSet(Arrays.asList(MatchSequence.nodes));
+
+        for (Integer node : abList)
+        {
+            Log.v(TAG, " Success Nodes  " + node +" =  "+buttonMapRev.get(node+""));
+            ImageButton btnClick = (ImageButton) findViewById(buttonMapRev.get(node+""));
+            //Resources res = getResources();
+            //Drawable shape = res. getDrawable(R.drawable.buttonplayer1);
+            // btnClick.setBackground();;
+            btnClick.clearAnimation();
+            // btnClick.setBackground(shape);
+        }
+    }
+
+
     private void setColor( Set<Integer> aList,  Set<Integer> bList)
     {
 
@@ -489,6 +585,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
             ImageButton btnClick = (ImageButton) findViewById(buttonMapRev.get(node+""));
             Resources res = getResources();
             btnClick.setImageResource(R.drawable.soccerball);
+
             // b1.setText(adapt_objmenu.city_name_array[i]);
            // RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
@@ -514,6 +611,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
             Resources res = getResources();
             Drawable shape = res. getDrawable(R.drawable.grey);
             btnClick.setBackground(shape);
+            btnClick.setImageResource(R.drawable.grey);
         }
 
 

@@ -1,9 +1,13 @@
 package com.innovativemobileapps.ngujjari.squareapp;
+import android.util.Log;
+
 import com.innovativemobileapps.ngujjari.squareapp.ActionTakenBean;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -39,6 +43,7 @@ public class MatchSequence implements Runnable   {
     boolean flipPlayer = true;
     boolean actionSuccess = false;
     boolean dragStatus = false;
+    boolean level2 = true;
 
     public static final String MSG_1001 = "Entered value is already exist";
 
@@ -49,7 +54,7 @@ public class MatchSequence implements Runnable   {
 
     private void log(String tag, String msg)
     {
-        //log(TAG, tag + "  ==  "+msg);
+        Log.v(TAG, tag + "  ==  " + msg);
     }
     static
     {
@@ -537,7 +542,7 @@ public class MatchSequence implements Runnable   {
         }
         else
         {
-            log(TAG +"execute(int a) : ","Lets play the game !!! !!!!");
+            log(TAG + "execute(int a) : ", "Lets play the game !!! !!!!");
 
             Set<Integer> abList =  player.equals("Player2") ? bList : aList;
             int validateInputReturn = validateInput(a, player, abList, tList );
@@ -599,7 +604,7 @@ public class MatchSequence implements Runnable   {
     }
 
 
-
+/*
     // Take the input until user enter exit or e
     public void runAlg()
     {
@@ -646,7 +651,7 @@ public class MatchSequence implements Runnable   {
 
     }
 
-
+*/
     public <T> List<T> twoDArrayToList(T[][] twoDArray) {
         List<T> list = new ArrayList<T>();
         for (T[] array : twoDArray) {
@@ -703,15 +708,23 @@ public class MatchSequence implements Runnable   {
         List<Rank> rankReturnList = new ArrayList<Rank>();
         for(Integer nextMv : remainedMoves)
         {
-            Set<Integer> targetNds = new HashSet<Integer>(aListOtherNds);
+            //Set<Integer> targetNds = new HashSet<Integer>(aListOtherNds);
+            Set<Integer> targetNds = new HashSet<Integer>();
             targetNds.add(nextMv);
             List<List<Integer>> returnRankNds = new ArrayList<List<Integer>>();
             int rank = rank(targetNds, returnRankNds);
-            Rank rankC = new Rank();
-            rankC.fromNd = fromNd;
-            rankC.rank = rank;
-            rankC.rankList = returnRankNds;
-            rankReturnList.add(rankC);
+            log(TAG, "calculateRank  === nextMv=  "+nextMv +" rank = "+rank ); //+"  returnRankNds= "+ ((ArrayList)returnRankNds.toArray()[0]).toArray().toString());
+            if(rank > -1) {
+                Rank rankC = new Rank();
+                rankC.fromNd = fromNd;
+                rankC.rank = rank;
+                returnRankNds.clear();
+                List newArry = new ArrayList<Integer>();
+                newArry.add(nextMv);
+                returnRankNds.add(newArry);
+                rankC.rankList = returnRankNds;
+                rankReturnList.add(rankC);
+            }
         }
         return rankReturnList;
     }
@@ -725,7 +738,7 @@ public class MatchSequence implements Runnable   {
     }
 
 
-    private ActionTakenBean predictUserinput(String player)
+    public ActionTakenBean predictUserinput(String player)
     {
         boolean hit = false;
         int returnVal = -1;
@@ -767,9 +780,11 @@ public class MatchSequence implements Runnable   {
             {
                 for(Integer toNd : rankListOP){ // calculate nd which not there in aList
                     for(Integer fromNd : abList){
-                        if(fromNd != toNd && validTargetNdsList.contains(toNd) && isValidMove(fromNd, toNd)){
-                            playerAction.setToNd(toNd);
-                            break;
+                        if(fromNd.intValue() != toNd.intValue() && validTargetNdsList.contains(toNd.intValue()) && isValidMove(fromNd.intValue(), toNd.intValue()) ){
+                            if((!otherPlayerWon(player, fromNd))) {
+                                playerAction.setToNd(toNd);
+                                break;
+                            }
                         }
                     }
                 }
@@ -785,20 +800,62 @@ public class MatchSequence implements Runnable   {
             for(Integer fromNd : abList){
                 List<Integer>  remainedMoves = this.remainedMovesList(fromNd, tList);
                 for(Integer mv : remainedMoves){
-                    if(validTargetNdsList.contains(mv) && isValidMove(fromNd, mv)){
-                        playerAction.setFromNd(fromNd);
-                        playerAction.setToNd(mv);
+                    if(validTargetNdsList.contains(mv) && isValidMove(fromNd, mv) ){
+                        if((!otherPlayerWon(player, fromNd))) {
+                            playerAction.setFromNd(fromNd);
+                            playerAction.setToNd(mv);
+                            break;
+                        }
                     }
                 }
 
             }
 
         }
+        Set<Integer> validNds = new HashSet<Integer>();
+        for(Integer nd : validTargetNdsList){
+            validNds.add(nd);
+        }
+        checkOtherPlayerRank(player, playerAction, validNds, playerAction.getFromNd()); // -1 since single input - no from node
         log(TAG, "Return playerAction == "+playerAction);
         return playerAction;
     }
 
-    private int predictUserinput(String inputType, String player)
+    private boolean otherPlayerWon(String player, Integer fromNd)
+    {
+
+        boolean returnVal = false;
+        Set<Integer> abList = null;
+        String localPlayer = "";
+        if(player.equals("Player1")){
+            abList = bList;
+            localPlayer = "Player2";
+        }
+        else{
+            abList = aList;
+            localPlayer = "Player1";
+        }
+
+
+        if(abList.size() > 1) // dragging
+        {
+            for (Integer selectedNd : abList) {
+                Set<Integer> targetList = new HashSet<Integer>(abList);
+                targetList.remove(selectedNd);
+                targetList.add(fromNd);
+                if (isWon(localPlayer, targetList)) {
+                    log(TAG, "otherPlayerWon  true , Take other From  !!!!!!!!!!!!!!!! fromNd = " +fromNd);
+                    returnVal = true;
+                }
+            }
+        }
+
+        log(TAG, "check otherPlayerWon == "+fromNd +" returnVal = "+returnVal);
+
+        return returnVal;
+    }
+
+    public int predictUserinput(String inputType, String player)
     {
         boolean hit = false;
         int returnVal = -1;
@@ -826,14 +883,17 @@ public class MatchSequence implements Runnable   {
                 }
 
 
-                if(player.equals("Player1")){
+                ActionTakenBean  actionTakenBean = (player.equals("Player1")) ? predictSingleInput("Player1", setA) : predictSingleInput("Player2", setA) ;
+                returnVal = (actionTakenBean.getToNd() != null) ? actionTakenBean.getToNd().intValue() : -1 ;
+
+              /*  if(player.equals("Player1")){
                     returnVal = pridict(this.tList, this.aList, setA);
                 }
                 else{
                     returnVal = pridict(this.tList, this.bList, setA);
-                }
+                }*/
 
-                if(returnVal == -1) returnVal = a;
+                if(returnVal < 1) { returnVal = a; }
 
                 if(returnVal > 0)hit = true;
             }
@@ -841,7 +901,176 @@ public class MatchSequence implements Runnable   {
         return returnVal;
     }
 
-    private int pridict(List<Integer> tList , Set<Integer> abPrevList, Set<Integer> validNbrs)
+    private void checkOtherPlayerRank(String currentPlayer, ActionTakenBean cPlayerAction, Set<Integer> validNds, Integer fromNd)
+    {
+        Set<Integer> abList = null;
+
+        if(currentPlayer.equals("Player1")){
+            abList = bList;  // set otherPlayer
+        }
+        else{
+            abList = aList;
+        }
+        log(TAG, "checkOtherPlayerRank abList "+ abList );// currentRank === " + currentRank +"  rankList size: "+returnRankNds.size());
+        List<List<Integer>> returnRankNds = new ArrayList<List<Integer>>();
+        int currentRank = rank(abList, returnRankNds);
+        if(currentRank == 2){
+            List<Integer> returnNds = new ArrayList<Integer>();
+
+                for(List<Integer> rankNds : returnRankNds){
+
+                    for (Integer rankNd : rankNds) {
+                        if (!abList.contains(rankNd)) {
+                            if(fromNd == null || fromNd.intValue() < 0) {
+                                returnNds.add(rankNd);
+                            }else{
+                                if(fromNd.intValue() != rankNd.intValue() && isValidMove(fromNd.intValue(), rankNd.intValue())){
+                                    returnNds.add(rankNd);
+
+                                }
+                            }
+                        }
+                    }
+
+            }
+            log(TAG, "checkOtherPlayerRank returnNds "+ returnNds +"  , validNds = "+validNds);
+            for (Integer returnNd : returnNds){
+                if(validNds.contains(returnNd)){
+                    cPlayerAction.setToNd(returnNd);
+                    log(TAG, "checkOtherPlayerRank returnNd " + returnNd );
+                    return;
+                }
+            }
+
+        }
+
+        if(cPlayerAction != null && cPlayerAction.getRank() != null && cPlayerAction.getRank().intValue() < currentRank){
+
+            log(TAG, "checkOtherPlayerRank currentRank === " + currentRank +"  rankList size: "+returnRankNds.size());
+            Integer toNd = cPlayerAction.getToNd();
+            if(fromNd != null && fromNd.intValue() > 0){
+
+            }
+/*
+            for (Iterator<Rank> rankIte = rankList.iterator(); rankIte.hasNext(); ) {
+                Rank rank = rankIte.next();
+                // if (rank.rank == rankVal) {
+                rankVal = rank.rank;
+                finalrank = rank;
+                log(TAG, "predictSingleInput finalrank.rank === " + finalrank.rank);
+                if (finalrank != null && finalrank.rank >= currentRank) {
+                    //playerAction.setFromNd(finalrank.fromNd);
+                    for (List<Integer> rankListOP : finalrank.rankList) {
+                        for (Integer toNd : rankListOP) { // calculate nd which not there in aList
+                            log(TAG, toNd + " == "+abList.contains(toNd)+ " predictSingleInput isValidSingleInput === " + isValidSingleInput(validNds, toNd));
+                            if ((!abList.contains(toNd)) && isValidSingleInput(validNds, toNd)) {
+                                playerAction.setToNd(toNd);
+                                playerAction.setRank(finalrank.rank);
+                                break;
+                            }
+
+                        }
+                    }
+                    //
+                }
+                // }
+
+                if (playerAction.getToNd() != null && playerAction.getToNd().intValue() > 0) break; // Come out of the loop
+                if (rankIte.hasNext() == false) { // last object in the list, decrement the rankVal
+                    rankVal--;
+                }
+            }
+            */
+        }
+        //log(TAG, "calculateRank  === nextMv=  "+nextMv +" rank = "+rank ); //+"  returnRankNds= "+ ((ArrayList)returnRankNds.toArray()[0]).toArray().toString());
+
+
+    }
+    public ActionTakenBean predictSingleInput(String player, Set<Integer> validNds)
+    {
+        boolean hit = false;
+        int returnVal = -1;
+        ActionTakenBean playerAction = new ActionTakenBean(player, null, null);
+        List<Rank> rankList = new ArrayList<Rank>();
+        Set<Integer> abList = null;
+        if(player.equals("Player1")){
+            abList = aList;
+        }
+        else{
+            abList = bList;
+        }
+
+        if(abList.size() > 0)
+        {
+            for (Integer fromNd : abList) {  // @TODO modify to check for max rank from all remained moves
+                List<Integer> remainedMoves = this.remainedMovesList(fromNd, tList);
+                Set<Integer> aListOtherNds = new HashSet<Integer>(abList);
+                aListOtherNds.remove(fromNd);
+                rankList.addAll(calculateRank(fromNd, aListOtherNds, remainedMoves));
+            }
+
+
+            int rankVal = 3;
+            Rank finalrank = null;
+            List<List<Integer>> returnRankNds = new ArrayList<List<Integer>>();
+            int currentRank = rank(abList, returnRankNds);
+            log(TAG, "predictSingleInput currentRank === " + currentRank +"  rankList size: "+rankList.size());
+            if(rankList.size() > 0){
+                Collections.sort(rankList, new Comparator<Rank>() {
+                    @Override
+                    public int compare(Rank rank, Rank t1) {
+                        return rank.rank.intValue() > t1.rank.intValue() ? -1 : 1;
+                    }
+                });
+            }
+
+            for (Iterator<Rank> rankIte = rankList.iterator(); rankIte.hasNext(); ) {
+                Rank rank = rankIte.next();
+               // if (rank.rank == rankVal) {
+                    rankVal = rank.rank;
+                    finalrank = rank;
+                    log(TAG, "predictSingleInput finalrank.rank === " + finalrank.rank);
+                    if (finalrank != null && finalrank.rank >= currentRank) {
+                        //playerAction.setFromNd(finalrank.fromNd);
+                        for (List<Integer> rankListOP : finalrank.rankList) {
+                            for (Integer toNd : rankListOP) { // calculate nd which not there in aList
+                                log(TAG, toNd + " == "+abList.contains(toNd)+ " predictSingleInput isValidSingleInput === " + isValidSingleInput(validNds, toNd));
+                                if ((!abList.contains(toNd)) && isValidSingleInput(validNds, toNd)) {
+                                    playerAction.setToNd(toNd);
+                                    playerAction.setRank(finalrank.rank);
+                                    break;
+                                }
+
+                            }
+                        }
+                        //
+                    }
+               // }
+
+                if (playerAction.getToNd() != null && playerAction.getToNd().intValue() > 0) break; // Come out of the loop
+                if (rankIte.hasNext() == false) { // last object in the list, decrement the rankVal
+                    rankVal--;
+                }
+            }
+        }else{ // first selection
+            playerAction.setToNd(Integer.valueOf(randomValueArray(validNds.toArray())));
+            playerAction.setRank(-1);
+        }
+
+        checkOtherPlayerRank(player, playerAction, validNds, -1); // -1 since single input - no from node
+        log(TAG, "predictSingleInput Return playerAction == "+playerAction);
+        return playerAction;
+    }
+
+    private boolean isValidSingleInput(Set<Integer> validNbrs, Integer nd)
+    {
+        if(validNbrs.contains(nd)){
+            return true;
+        }
+
+        return false;
+    }
+    public int pridict(List<Integer> tList , Set<Integer> abPrevList, Set<Integer> validNbrs)
     {
         int returnNbr = -1;
         int[][] rankArray = null;
@@ -1022,7 +1251,7 @@ public class MatchSequence implements Runnable   {
         return target[index];
     }
 
-    private int getRandomNum()
+    public int getRandomNum()
     {
         Random rn = new Random();
         return rn.nextInt(9)+1;
@@ -1034,7 +1263,7 @@ public class MatchSequence implements Runnable   {
 
 
         MatchSequence ms = new MatchSequence();
-        ms.runAlg();
+      //  ms.runAlg();
         //log(TAG, ms.getRandomNum());
 
     }

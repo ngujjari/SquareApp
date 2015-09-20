@@ -9,11 +9,22 @@ public class ActionTakenBean {
     private Integer fromNd;
     private Integer toNd;
 
+    public void setRank(Integer rank) {
+        this.rank = rank;
+    }
+
+    private Integer rank;
+
+    public Integer getRank() {
+        return rank;
+    }
+
     public ActionTakenBean(String player, Integer fromNd, Integer toNd)
     {
         this.player = player;
         this.fromNd = fromNd;
         this.toNd = toNd;
+        this.rank = -1;
     }
 
     public void reset(String player)
@@ -21,6 +32,7 @@ public class ActionTakenBean {
         this.player = player;
         this.fromNd = -1;
         this.toNd = -1;
+        this.rank = -1;
     }
     public Integer getFromNd() {
         return fromNd;
