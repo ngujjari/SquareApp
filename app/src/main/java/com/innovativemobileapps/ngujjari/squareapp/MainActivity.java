@@ -2,6 +2,7 @@ package com.innovativemobileapps.ngujjari.squareapp;
 
 import android.app.Activity;
 import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
@@ -9,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Xml;
 import android.view.DragEvent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -28,7 +30,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlSerializer;
 
+import java.io.EOFException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -359,9 +364,12 @@ public class MainActivity extends Activity implements View.OnClickListener{
                                 {
                                     Log.v(TAG, "MyTouchListener: runAlg Lets play the game !!! !!!!  player = " + ms.player);
                                     ActionTakenBean userInput =  ms.predictUserinput(ms.player);
-                                    executeStep = ms.execute(userInput.getFromNd(), userInput.getToNd());
-                                    //break;
-
+                                    int fromNd = (userInput.getFromNd() != null) ? userInput.getFromNd().intValue() : -1;
+                                    int toNd = (userInput.getToNd() != null) ? userInput.getToNd().intValue() : -1;
+                                    if(fromNd > 0 && toNd > 0) {
+                                        executeStep = ms.execute(fromNd, toNd);
+                                        //break;
+                                    }
                                 }
 
                                 executeStep = (executeStep == true)  ? false : true;
@@ -439,7 +447,9 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
                                         if (ms.tList.size() < 6) {
 
-                                            int toNd = ms.predictUserinput("singleNd", ms.player);
+                                            //int toNd = ms.predictUserinput("singleNd", ms.player);
+                                            ActionTakenBean userInput = ms.predictUserinput(ms.player);
+                                            int toNd = userInput.getToNd();
                                             if (toNd == -1) {
                                                 toNd = ms.getRandomNum();
                                             }
@@ -450,8 +460,15 @@ public class MainActivity extends Activity implements View.OnClickListener{
                                             ActionTakenBean userInput = ms.predictUserinput(ms.player);
                                             Log.v(TAG, "MyDragListener :runAlg Lets play the game !!! !!!!  player = " + ms.player +" from = "+userInput.getFromNd() +" toNd = "+userInput.getToNd());
 
-                                            executeStep = ms.execute(userInput.getFromNd() , userInput.getToNd());
-                                            //break;
+                                            int fromNd = (userInput.getFromNd() != null) ? userInput.getFromNd().intValue() : -1;
+                                            int toNd = (userInput.getToNd() != null) ? userInput.getToNd().intValue() : -1;
+                                            if(fromNd > 0 && toNd > 0) {
+                                                executeStep = ms.execute(fromNd, toNd);
+                                                //break;
+                                            }else{
+                                                Log.v(TAG, "ELSE MyDragListener :runAlg Lets play the game !!! !!!!  player = " + ms.player +" from = "+fromNd +" toNd = "+toNd);
+
+                                            }
 
                                         }
 
@@ -560,13 +577,14 @@ public class MainActivity extends Activity implements View.OnClickListener{
     private void setColor( Set<Integer> aList,  Set<Integer> bList)
     {
 
+        // Flowers, X's and Os ,
         Set<Integer> setA = new HashSet(Arrays.asList(MatchSequence.nodes));
         for (Integer node : aList)
         {
             Log.v(TAG, " A SetColor Node  " + node +" =  "+buttonMapRev.get(node+""));
             ImageButton btnClick = (ImageButton) findViewById(buttonMapRev.get(node+""));
             Resources res = getResources();
-            btnClick.setImageResource(R.drawable.cricket01);
+            btnClick.setImageResource(R.drawable.xshape);
             // b1.setText(adapt_objmenu.city_name_array[i]);
             //RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
@@ -584,7 +602,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
             btnClick.setBackgroundColor(Color.CYAN);*/
             ImageButton btnClick = (ImageButton) findViewById(buttonMapRev.get(node+""));
             Resources res = getResources();
-            btnClick.setImageResource(R.drawable.soccerball);
+            btnClick.setImageResource(R.drawable.circle);
 
             // b1.setText(adapt_objmenu.city_name_array[i]);
            // RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -654,4 +672,48 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
 
     }
+
+
+    public void writeToFile(String vlu)
+    {
+
+        String filename = "file.txt";
+
+        try {
+            FileOutputStream fos;
+
+            fos = openFileOutput(filename, Context.MODE_APPEND);
+
+
+            XmlSerializer serializer = Xml.newSerializer();
+            serializer.setOutput(fos, "UTF-8");
+            serializer.startDocument(null, Boolean.valueOf(true));
+            serializer.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
+
+            serializer.startTag(null, "root");
+
+            for (int j = 0; j < 3; j++) {
+
+                serializer.startTag(null, "record");
+
+                serializer.text(vlu);
+
+                serializer.endTag(null, "record");
+            }
+            serializer.endDocument();
+
+            serializer.flush();
+
+            fos.close();
+        }
+        catch (EOFException eof){
+            Log.v(TAG, "Write file EOF ex .. " + eof);
+        }
+        catch (Exception e){
+            Log.v(TAG, "Write file  ex .. " + e);
+        }
+    }
+
+
+
 }

@@ -9,6 +9,33 @@ public class ActionTakenBean {
     private Integer fromNd;
     private Integer toNd;
 
+    @Override
+    public boolean equals(Object object) {
+        boolean result = false;
+        if (object == null || object.getClass() != getClass()) {
+            result = false;
+        } else {
+            ActionTakenBean actionTakenBean = (ActionTakenBean) object;
+            if (this.player == actionTakenBean.getPlayer()
+                    && this.fromNd == actionTakenBean.getFromNd() && this.toNd == actionTakenBean.getToNd()
+                    && this.player.equals(actionTakenBean.getPlayer())
+                    && this.fromNd.equals(actionTakenBean.getFromNd()) && this.toNd.equals(actionTakenBean.getToNd())) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    // just omitted null checks
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 7 * hash + this.player.hashCode();
+        hash = 7 * hash + this.fromNd.hashCode();
+        hash = 7 * hash + this.toNd.hashCode();
+        return hash;
+    }
+
     public void setRank(Integer rank) {
         this.rank = rank;
     }

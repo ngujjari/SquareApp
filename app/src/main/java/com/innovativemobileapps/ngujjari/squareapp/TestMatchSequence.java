@@ -1,29 +1,29 @@
 package com.innovativemobileapps.ngujjari.squareapp;
-import android.content.Context;
-import android.util.Log;
 
-import com.innovativemobileapps.ngujjari.squareapp.ActionTakenBean;
+/**
+ * Created by ngujjari on 11/13/15.
+ */
+
 
 import java.io.FileOutputStream;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.StringTokenizer;
-import java.util.TreeSet;
+        import java.lang.reflect.Array;
+        import java.util.ArrayList;
+        import java.util.Arrays;
+        import java.util.Collections;
+        import java.util.Comparator;
+        import java.util.HashMap;
+        import java.util.HashSet;
+        import java.util.Iterator;
+        import java.util.List;
+        import java.util.Random;
+        import java.util.Scanner;
+        import java.util.Set;
+        import java.util.StringTokenizer;
 
 /**
  * Created by ngujjari on 2/16/15.
  */
-public class MatchSequence implements Runnable   {
+public class TestMatchSequence implements Runnable   {
 
     private static final String TAG = "MatchSequence";
 
@@ -57,8 +57,8 @@ public class MatchSequence implements Runnable   {
 
     private void log(String tag, String msg)
     {
-       Log.v(TAG, tag + "  ==  " + msg);
-       // System.out.println(tag + "  ==  " + msg);
+        //Log.v(TAG, tag + "  ==  " + msg);
+        System.out.println(TAG  + "  ==  " + msg);
     }
     static
     {
@@ -152,68 +152,12 @@ public class MatchSequence implements Runnable   {
 
         return validList.toString();
     }
-    /*private int takeInput(String player, Set<Integer> abList, List<Integer> tList)
-    {
-        Scanner in = new Scanner(System.in);
-        Set<Integer> setA = new HashSet(Arrays.asList(nodes));
-        Set<Integer> setB = new HashSet(tList);
-        setA.removeAll(setB);
-        log(TAG,player+" : move pawn from "+abList.toString() +" to " + setA.toString() );
-        String s = in.nextLine();
-        if(s.equals("e") || s.equals("exit"))
-        {
-            return -1;
-        }
-        else{
-            StringTokenizer tokens = new StringTokenizer(s, ",");
 
-            try{
-                int fromNd = Integer.parseInt(tokens.nextToken());
-                int toNd = Integer.parseInt(tokens.nextToken());
-
-                log(TAG,player+" : moved pawn from "+fromNd +" to " + toNd);
-
-                if(abList.contains(new Integer(fromNd)) && setA.contains(new Integer(toNd)))
-                {
-                    log(TAG,"Valid input");
-
-                    if(!isValidMove(fromNd, toNd))
-                    {
-
-                        log(TAG,"Invalid Move !! valid moves are .. "+abList.toArray()[0] +" -> " + remainedMoves((Integer)abList.toArray()[0],tList)
-                                + " , "+abList.toArray()[1] +" -> "+remainedMoves((Integer)abList.toArray()[1],tList)
-                                + " , "+abList.toArray()[2] +" -> "+remainedMoves((Integer)abList.toArray()[2],tList));
-                        //takeInput(player, abList, tList);
-                        return 1;
-                    }
-                    abList.remove(new Integer(fromNd));
-                    abList.add(new Integer(toNd));
-                }
-                else
-                {
-                    log(TAG,player+" : InValid input try again !!");
-                    //takeInput(player, abList, tList);
-                    return 1;
-                }
-
-            }
-            catch(NumberFormatException e)
-            {
-                log(TAG,player+" : Invalid input enter again !!" );
-                //takeInput(player, abList, tList);
-                return 1;
-            }
-
-            // return Integer.parseInt(s);
-        }
-        return 0;
-    }
-*/
     private boolean validateInput(int a)
     {
         List<Integer> allNodes = Arrays.asList(nodes);
         boolean returnVal = false;
-        log(TAG," validateInput begin input = " + a);
+        log(TAG, " validateInput begin input = " + a);
         if(allNodes.contains(new Integer(a)))
         {
             if(tList.contains(new Integer(a)) && tList.size() < 6)
@@ -237,66 +181,7 @@ public class MatchSequence implements Runnable   {
         return returnVal;
     }
 
-    // Take the input until user enter exit or e
-	/*
-    public void runAlg()
-    {
-        int a = 1;
-        String player = "Player1";
-        boolean isWon = false;
-        // a = this.takeInput();
-        while( a != -1 && !isWon)
-        {
 
-            if(tList.size() < 6)
-            {
-                a = this.takeInput(player);
-                if(!validateInput(a))
-                {
-                    continue;
-                }
-                 log(TAG,"You entered number "+a);
-
-                if(player.equals("Player1"))
-                {
-                    aList.add(new Integer(a));
-                    //  log(TAG,"Player1 array = "+aList.toArray().toString());
-                    isWon = isWon("Player1",aList);
-                }
-                else
-                {
-                    bList.add(new Integer(a));
-                    isWon = isWon("Player2",bList);
-                }
-
-                tList.clear();
-                tList.addAll(aList);
-                tList.addAll(bList);
-
-
-
-            }
-            else
-            {
-                 log(TAG,"Lets play the game !!! !!!!");
-                Set<Integer> abList =  player.equals("Player2") ? bList : aList;
-                a = 1;
-                while(a == 1){
-                    a = this.takeInput(player, abList, tList);
-                }
-                isWon = player.equals("Player2") ? isWon("Player2",bList) : isWon("Player1",aList);
-                tList.clear();
-                tList.addAll(aList);
-                tList.addAll(bList);
-
-            }
-            player = player.equals("Player2") ? "Player1" : "Player2";
-        }
-         log(TAG,"You exited the program ");
-
-
-
-    }*/
 
     public boolean validateInputA(int a)
     {
@@ -580,7 +465,6 @@ public class MatchSequence implements Runnable   {
             msgList.clear();
             //msgList.add("execute: INvalid move !!");
 
-            log(TAG +"execute(int a, int b) : "," tList "+tList.size());
         }
         else
         {
@@ -609,54 +493,6 @@ public class MatchSequence implements Runnable   {
     }
 
 
-/*
-    // Take the input until user enter exit or e
-    public void runAlg()
-    {
-        int a = 0;
-
-        boolean isWon = false;
-        int fromNd = -1;
-        int toNd = -1;
-        boolean executeStep = false;
-        // a = this.takeInput();
-        this.player = "Player1";
-        while( a != -1 && !isWon)
-        {
-
-            if(tList.size() < 6)
-            {
-                toNd =  predictUserinput("singleNd", player);
-                if(toNd == -1){
-                    toNd = getRandomNum();
-                }
-
-                log(TAG, "runAlg toNd before execute == "+ toNd +" "+" from palyer = "+player);
-                executeStep = this.execute(toNd);
-            }
-            else
-            {
-                log(TAG, "runAlg Lets play the game !!! !!!!  player = " +player);
-                ActionTakenBean userInput =  predictUserinput(player);
-                executeStep = this.execute(userInput.getFromNd(), userInput.getToNd());
-                //break;
-
-            }
-            if(this.isWon == true) {
-                log(TAG, "runAlg aList: "+aList +"   bList: "+ bList);
-                break;
-            }
-            if(executeStep == true){
-                this.flipPlayer = true;
-                this.player = this.player.equals("Player2") ? "Player1" : "Player2";
-            }
-
-        }
-        log(TAG, "runAlg: You exited the program ");
-
-    }
-
-*/
     public <T> List<T> twoDArrayToList(T[][] twoDArray) {
         List<T> list = new ArrayList<T>();
         for (T[] array : twoDArray) {
@@ -708,6 +544,377 @@ public class MatchSequence implements Runnable   {
         return -1;
     }
 
+    public static void main(String[] args) {
+        // TODO Auto-generated method stub
+        //int[] fromNds = {7, 4, 2};
+        ActionTakenBean playerAction = new ActionTakenBean("Player1", null, null);
+
+    	/*List<Integer> remainedMoves7 = new ArrayList<Integer>();
+    	remainedMoves7.add(6);
+
+    	List<Integer> remainedMoves4 = new ArrayList<Integer>();
+    	remainedMoves4.add(3);
+
+    	List<Integer> remainedMoves2 = new ArrayList<Integer>();
+    	remainedMoves2.add(9);
+    	remainedMoves2.add(3);*/
+        TestMatchSequence ms = new TestMatchSequence();
+        //List <List<Integer>> remainedMoves = new ArrayList<List<Integer>>();
+
+        //ms.aList.add(7); ms.aList.add(4); ms.aList.add(2);
+        //ms.bList.add(8); ms.bList.add(5); ms.bList.add(1);
+        ms.aList.add(2); ms.aList.add(8); ms.aList.add(5);
+        ms.bList.add(9); ms.bList.add(1); ms.bList.add(4);
+
+        ms.tList.addAll(ms.aList);
+        ms.tList.addAll(ms.bList);
+        Set<Integer> bList = ms.bList;
+        // A [7, 4, 2]
+        // B [8, 5, 1]
+        // X [3, 6, 9]
+
+
+        List<MyRank> tRanksList = new ArrayList<MyRank>();
+        for(Integer fromNd : bList)
+        {
+            List<Integer>  myremainedMoves = ms.remainedMovesList(fromNd, ms.tList);
+            Set<Integer> bListOtherNds = new HashSet<Integer>(bList);
+            bListOtherNds.remove(fromNd);
+            for(Integer nextMv : myremainedMoves)
+            {
+                Set<Integer> tempABListNds = new HashSet<Integer>();
+                tempABListNds.add(nextMv);
+                tempABListNds.addAll(bListOtherNds);
+                List<List<Integer>> returnRankNds = new ArrayList<List<Integer>>();
+                int rank = ms.rank(tempABListNds, returnRankNds);
+                ms.log(TAG, "calculateRank  === fromNd = "+fromNd +" nextMv=  "+nextMv +" rank = "+rank  +"  returnRankNds= "+ ((ArrayList)returnRankNds.toArray()[0]).toArray().toString());
+
+                /*****SET RANK *****/
+                MyRank myRank = new MyRank();
+                myRank.bList = tempABListNds; // Not sure. Ignore . should not be used.
+                myRank.aList = ms.aList;
+                myRank.fromNd = fromNd;
+                myRank.toNd = nextMv;
+                myRank.rank = rank;
+
+                if(rank != 3)
+                {
+                    List<Integer>  tempTListNds = new ArrayList<Integer>();
+                    tempTListNds.addAll(tempABListNds);
+                    tempTListNds.addAll(ms.aList);
+
+                    for(Integer tempFrom : ms.aList){
+                        List<Integer>  myTempremainedMoves = ms.remainedMovesList(tempFrom, tempTListNds);
+                        Set<Integer> aTempListOtherNds = new HashSet<Integer>(ms.aList);
+                        aTempListOtherNds.remove(tempFrom);
+                        for(Integer nextTempMv : myTempremainedMoves)
+                        {
+                            Set<Integer> tempNds = new HashSet<Integer>();
+                            tempNds.add(nextTempMv);
+                            tempNds.addAll(aTempListOtherNds);
+                            List<List<Integer>> returnTempRankNds = new ArrayList<List<Integer>>();
+                            int temprank = ms.rank(tempNds, returnTempRankNds);
+                            ms.log(TAG, "xxcalculateRank  === xxfromNd = "+tempFrom +" xxnextMv=  "+nextTempMv +" xxrank = "+temprank  +"  returnRankNds= "+ ((ArrayList)returnTempRankNds.toArray()[0]).toArray().toString());
+
+                            MyRank myXXRank = new MyRank();
+                            myXXRank.aList = tempNds;
+                            myXXRank.bList = tempABListNds;
+                            myXXRank.fromNd = tempFrom;
+                            myXXRank.toNd = nextTempMv;
+                            myXXRank.rank = temprank;
+
+
+                            // Compute second level ranks for B nodes after A or XX are moved
+                            List<Integer>  tempAATListNds = new ArrayList<Integer>();
+                            tempAATListNds.addAll(tempNds);
+                            tempAATListNds.addAll(tempABListNds);
+
+                            for(Integer tempbFrom : tempABListNds){
+                                List<Integer>  myBTempremainedMoves = ms.remainedMovesList(tempbFrom, tempAATListNds);
+                                Set<Integer> aTempBListOtherNds = new HashSet<Integer>(tempABListNds);
+                                aTempBListOtherNds.remove(tempbFrom);
+                                for(Integer nextBTempMv : myBTempremainedMoves)
+                                {
+                                    Set<Integer> tempBNds = new HashSet<Integer>();
+                                    tempBNds.add(nextBTempMv);
+                                    tempBNds.addAll(aTempBListOtherNds);
+                                    if(tempbFrom == 6 && nextBTempMv == 5){
+                                        System.out.println("Test");
+                                    }
+                                    List<List<Integer>> returnTempBRankNds = new ArrayList<List<Integer>>();
+                                    int tempBrank = ms.rank(tempBNds, returnTempBRankNds);
+                                    ms.log(TAG, "bbcalculateRank  === bbfromNd = "+tempbFrom +" nextBTempMv=  "+nextBTempMv +" tempBrank = "+tempBrank  +"  returnRankNds= "+ ((ArrayList)returnTempRankNds.toArray()[0]).toArray().toString());
+
+                                    MyRank myABRank = new MyRank();
+                                    myABRank.bList = tempBNds;
+                                    myABRank.aList = tempNds;
+                                    myABRank.fromNd = tempbFrom;
+                                    myABRank.toNd = nextBTempMv;
+                                    myABRank.rank = tempBrank;
+                                    myXXRank.bbRanks.add(myABRank);   // bbRank is a sub list in xxRank
+                                }
+
+                            } // bbRank End (Current Next ranks)
+
+                            myRank.xxRanks.add(myXXRank);
+
+                        }
+
+                    } // xxRank End
+
+                    tempTListNds.clear();
+                    tempTListNds.addAll(tempABListNds);
+                    tempTListNds.addAll(ms.aList);
+
+                    for(Integer tempFrom : tempABListNds){
+                        List<Integer>  myTempremainedMoves = ms.remainedMovesList(tempFrom, tempTListNds);
+                        Set<Integer> aTempListOtherNds = new HashSet<Integer>(tempABListNds);
+                        aTempListOtherNds.remove(tempFrom);
+                        for(Integer nextTempMv : myTempremainedMoves)
+                        {
+                            Set<Integer> tempNds = new HashSet<Integer>();
+                            tempNds.add(nextTempMv);
+                            tempNds.addAll(aTempListOtherNds);
+                            List<List<Integer>> returnTempRankNds = new ArrayList<List<Integer>>();
+                            int temprank = ms.rank(tempNds, returnTempRankNds);
+                            ms.log(TAG, "abcalculateRank  === abfromNd = "+tempFrom +" abnextMv=  "+nextTempMv +" abrank = "+temprank  +"  returnRankNds= "+ ((ArrayList)returnTempRankNds.toArray()[0]).toArray().toString());
+                            if(temprank == 3){
+                                ms.log(TAG, "Rank 3abcalculateRank  === abfromNd = "+tempFrom +" abnextMv=  "+nextTempMv +" abrank = "+temprank  +"  returnRankNds= "+ ((ArrayList)returnTempRankNds.toArray()[0]).toArray().toString());
+                            }
+                            MyRank myABRank = new MyRank();
+                            myABRank.bList = tempABListNds;
+                            myABRank.aList = ms.aList;
+                            myABRank.fromNd = tempFrom;
+                            myABRank.toNd = nextTempMv;
+                            myABRank.rank = temprank;
+                            myRank.abRanks.add(myABRank);
+                        }
+
+                    } // abRank End (Current Next ranks)
+                } // rank != 3
+                tRanksList.add(myRank);
+            }
+        } // end for
+
+        boolean targetFound = false;
+        for(MyRank r : tRanksList){
+            if(r.rank == 3){  // Check Current player , can win in the next step
+                playerAction.setFromNd(r.fromNd);
+                playerAction.setToNd(r.toNd);
+                ms.log(TAG, "Main  === HIT AB First level rank = "+playerAction );
+                targetFound = true;
+                break;
+            }
+        }
+
+        if(!targetFound) {
+            for(MyRank r : tRanksList){
+
+                for(MyRank xxR : r.xxRanks){
+                    if(xxR.rank == 3 && !targetFound){ // Other Player about to win. STOP it if possible.
+
+                        for(Integer fromNd : bList)
+                        {
+                            List<Integer>  myremainedMoves = ms.remainedMovesList(fromNd, ms.tList);
+                            if(myremainedMoves.contains(xxR.toNd))
+                            {
+                                playerAction.setFromNd(fromNd);
+                                playerAction.setToNd(xxR.toNd);
+                                ms.log(TAG, "Main  === HIT XX First level rank = "+playerAction );
+                                targetFound = true;
+                                break;
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
+        if(!targetFound) {
+            int rank3Cnt = 0;
+            List<MyRank> abRanksList = new ArrayList<MyRank>();
+            for(MyRank r : tRanksList){
+
+                for(MyRank xxR : r.xxRanks){
+                    for(MyRank bbR : xxR.bbRanks) {
+                        if (bbR.rank == 3) { // Other Player about to win. STOP it if possible.
+                            rank3Cnt++;
+                            abRanksList.add(bbR);
+                        }
+                    }
+                }
+            }
+    		/* if(rank3Cnt > 1){
+    			 List<Integer>  mostLikelyNds = new ArrayList<Integer>();
+    			 for(MyRank abR : abRanksList){
+
+
+
+		                 for(Integer tempFrom : abR.aList)
+		                 {
+		                	 List<Integer>  tempTListNds = new ArrayList<Integer>();
+			                 tempTListNds.addAll(abR.aList);
+			                 tempTListNds.addAll(abR.bList);
+
+			                 List<Integer>  myTempremainedMoves = ms.remainedMovesList(tempFrom, tempTListNds);
+			                 Set<Integer> aTempListOtherNds = new HashSet<Integer>(abR.aList);
+			                 aTempListOtherNds.remove(tempFrom);
+			                 for(Integer nextTempMv : myTempremainedMoves)
+			                 {
+			                	 Set<Integer> tempNds = new HashSet<Integer>();
+			                	 tempNds.add(nextTempMv);
+			                	 tempNds.addAll(aTempListOtherNds);
+			                     List<List<Integer>> returnTempRankNds = new ArrayList<List<Integer>>();
+			                     int temprank = ms.rank(tempNds, returnTempRankNds);
+			                     ms.log(TAG, "abcalculateRank second level === abfromNd = "+tempFrom +" abnextMv=  "+nextTempMv +" abrank = "+temprank  +"  returnRankNds= "+ ((ArrayList)returnTempRankNds.toArray()[0]).toArray().toString());
+
+			                     tempTListNds.clear();
+				                 tempTListNds.addAll(tempNds);
+				                 tempTListNds.addAll(abR.bList);
+				                 boolean rank3Rec = false;
+				                 for(Integer tempABRFrom : abR.bList){
+					                 List<Integer>  myABRTempremainedMoves = ms.remainedMovesList(tempABRFrom, tempTListNds);
+					                 Set<Integer> aTempABRListOtherNds = new HashSet<Integer>(abR.bList);
+					                 aTempABRListOtherNds.remove(tempABRFrom);
+					                 for(Integer nextABRTempMv : myABRTempremainedMoves)
+					                 {
+					                	 Set<Integer> tempABRNds = new HashSet<Integer>();
+					                	 tempABRNds.add(nextABRTempMv);
+					                	 tempABRNds.addAll(aTempABRListOtherNds);
+					                     List<List<Integer>> returnABRTempRankNds = new ArrayList<List<Integer>>();
+					                     int tempABRrank = ms.rank(tempABRNds, returnABRTempRankNds);
+					                     ms.log(TAG, "abcalculateRank  === tempABRFrom = "+tempABRFrom +" abnextMv=  "+nextABRTempMv +" tempABRrank = "+tempABRrank  +"  returnRankNds= "+ ((ArrayList)returnTempRankNds.toArray()[0]).toArray().toString());
+					                     if(tempABRrank == 3) rank3Rec = true;
+
+					                 }
+
+				                 }
+				                 if(!rank3Rec == true){ // Not find any rank 3 records , that should be ur most bet
+				                	 mostLikelyNds.add(nextTempMv);
+				                 }
+			                 }
+
+		                 }
+    			 }
+    			 // Begin
+    			 for(MyRank r : tRanksList){
+
+        			 for(MyRank abR : r.bbRanks){
+        				 if(abR.rank == 3 ){ // Other Player about to win. STOP it if possible.
+			    			 for(Integer fromNd : bList)
+					    	 {
+					             List<Integer>  myremainedMoves = ms.remainedMovesList(fromNd, ms.tList);
+					             if(fromNd.equals(abR.fromNd)&& myremainedMoves.contains(abR.toNd)
+					            		 && mostLikelyNds.contains(abR.toNd))
+					             {
+
+					            	 playerAction.setFromNd(fromNd);
+			    	    			 playerAction.setToNd(abR.toNd);
+			    	    			 ms.log(TAG, "Main  === HIT AB Second level multiple rank = "+playerAction );
+			    	    			 targetFound = true;
+			    	    			 break;
+					             }
+					    	 }
+        				 }
+        			 }
+    			 }
+    			 // End
+
+    		 }else */
+
+            if(!targetFound) {
+                // Choose B node with , with lower A or xx options.
+                // Chose B node with A or XX nodes having only winning nodes (Rank 3). If not don't choose ex. Rank 3 B nodes in XX  along with other B nodes
+
+                for(MyRank r : tRanksList) {
+
+                    for (MyRank xxR : r.xxRanks) {
+
+                        for (MyRank bbR : xxR.bbRanks) {
+                            if(bbR.rank == 3){
+
+                                xxR.xxTobbRank3Cnt++;
+                            }
+                        }
+                    }
+
+                }
+
+
+                for(MyRank r : tRanksList) {
+                    if(r.xxRanks.size() == 1 && r.xxRanks.get(0).xxTobbRank3Cnt > 0){
+                        playerAction.setFromNd(r.fromNd);
+                        playerAction.setToNd(r.toNd);
+                        ms.log(TAG, "Main  === HIT BB Second level rank , One XXNd with rank3 bbNd = "+playerAction );
+                        targetFound = true;
+                        break;
+                    }
+                }
+                if(!targetFound) {
+                    int leastXXCnt = -1;
+                    MyRank tempR = null;
+                    for (MyRank r : tRanksList) {
+                        r.xxCnt = r.xxRanks.size();
+                        if (leastXXCnt == -1) {
+                            leastXXCnt = r.xxCnt;
+                            continue;
+                        }
+                        else if (r.xxCnt > leastXXCnt) {
+                            continue;
+                        } else {
+                            playerAction.setFromNd(r.fromNd);
+                            playerAction.setToNd(r.toNd);
+                            ms.log(TAG, "Main  === HIT BB Second level rank , select lease XX nodes = "+playerAction );
+                           // break; wait until all iterations...
+                        }
+                    }
+                }
+                for(MyRank r : tRanksList){
+
+                    for(MyRank abR : r.bbRanks){
+                        if(abR.rank == 3 ){ // Other Player about to win. STOP it if possible.
+                            for(Integer fromNd : bList)
+                            {
+                                List<Integer>  myremainedMoves = ms.remainedMovesList(fromNd, ms.tList);
+                                if(myremainedMoves.contains(r.toNd))
+                                {
+
+                                    playerAction.setFromNd(fromNd);
+                                    playerAction.setToNd(r.toNd);
+                                    ms.log(TAG, "Main  === HIT AB Second level rank = "+playerAction );
+                                    targetFound = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        ms.log(TAG, "Main  === playerAction = "+playerAction );
+
+        // ms.execute(1, 2);
+        //log(TAG, ms.getRandomNum());
+
+    }
+
+    private List<Rank> calculateRank(Integer fromNd, Integer nextMv, Set<Integer> aListOtherNds )
+    {
+        List<Rank> rankReturnList = new ArrayList<Rank>();
+
+        //Set<Integer> targetNds = new HashSet<Integer>(aListOtherNds);
+        Set<Integer> targetNds = new HashSet<Integer>();
+        targetNds.add(nextMv);
+        targetNds.addAll(aListOtherNds);
+        List<List<Integer>> returnRankNds = new ArrayList<List<Integer>>();
+        int rank = rank(targetNds, returnRankNds);
+        log(TAG, "calculateRank  === fromNd = "+fromNd +" nextMv=  "+nextMv +" rank = "+rank ); //+"  returnRankNds= "+ ((ArrayList)returnRankNds.toArray()[0]).toArray().toString());
+
+        return rankReturnList;
+    }
+
     private List<Rank> calculateRank(Integer fromNd, Set<Integer> aListOtherNds, List<Integer>  remainedMoves)
     {
         List<Rank> rankReturnList = new ArrayList<Rank>();
@@ -745,26 +952,6 @@ public class MatchSequence implements Runnable   {
 
 
     public ActionTakenBean predictUserinput(String player)
-    {
-        boolean hit = false;
-        int returnVal = -1;
-        ActionTakenBean playerAction = new ActionTakenBean(player, null, null);
-        List<Rank> rankList = new ArrayList<Rank>();
-        Set<Integer> abList = null;
-        if(player.equals("Player1")){
-            abList = aList;
-        }
-        else{
-            abList = bList;
-        }
-
-        playerAction = this.getNextStep(player);
-
-        log(TAG, "Return playerAction == "+playerAction);
-        return playerAction;
-    }
-
-    public ActionTakenBean predictUserinputOld(String player)
     {
         boolean hit = false;
         int returnVal = -1;
@@ -946,23 +1133,23 @@ public class MatchSequence implements Runnable   {
         if(currentRank == 2){
             List<Integer> returnNds = new ArrayList<Integer>();
 
-                for(List<Integer> rankNds : returnRankNds){
+            for(List<Integer> rankNds : returnRankNds){
 
-                    for (Integer rankNd : rankNds) {
-                        if (!abList.contains(rankNd)) {
-                            if(fromNd == null || fromNd.intValue() < 0) {
+                for (Integer rankNd : rankNds) {
+                    if (!abList.contains(rankNd)) {
+                        if(fromNd == null || fromNd.intValue() < 0) {
+                            returnNds.add(rankNd);
+                        }else{
+                            if(fromNd.intValue() != rankNd.intValue() && isValidMove(fromNd.intValue(), rankNd.intValue())){
                                 returnNds.add(rankNd);
-                            }else{
-                                if(fromNd.intValue() != rankNd.intValue() && isValidMove(fromNd.intValue(), rankNd.intValue())){
-                                    returnNds.add(rankNd);
 
-                                }
                             }
                         }
                     }
+                }
 
             }
-            log(TAG, "checkOtherPlayerRank returnNds " + returnNds + "  , validNds = " + validNds);
+            log(TAG, "checkOtherPlayerRank returnNds " + returnNds + "  , validNds = " +validNds);
             for (Integer returnNd : returnNds){
                 if(validNds.contains(returnNd)){
                     cPlayerAction.setToNd(returnNd);
@@ -980,36 +1167,7 @@ public class MatchSequence implements Runnable   {
             if(fromNd != null && fromNd.intValue() > 0){
 
             }
-/*
-            for (Iterator<Rank> rankIte = rankList.iterator(); rankIte.hasNext(); ) {
-                Rank rank = rankIte.next();
-                // if (rank.rank == rankVal) {
-                rankVal = rank.rank;
-                finalrank = rank;
-                log(TAG, "predictSingleInput finalrank.rank === " + finalrank.rank);
-                if (finalrank != null && finalrank.rank >= currentRank) {
-                    //playerAction.setFromNd(finalrank.fromNd);
-                    for (List<Integer> rankListOP : finalrank.rankList) {
-                        for (Integer toNd : rankListOP) { // calculate nd which not there in aList
-                            log(TAG, toNd + " == "+abList.contains(toNd)+ " predictSingleInput isValidSingleInput === " + isValidSingleInput(validNds, toNd));
-                            if ((!abList.contains(toNd)) && isValidSingleInput(validNds, toNd)) {
-                                playerAction.setToNd(toNd);
-                                playerAction.setRank(finalrank.rank);
-                                break;
-                            }
 
-                        }
-                    }
-                    //
-                }
-                // }
-
-                if (playerAction.getToNd() != null && playerAction.getToNd().intValue() > 0) break; // Come out of the loop
-                if (rankIte.hasNext() == false) { // last object in the list, decrement the rankVal
-                    rankVal--;
-                }
-            }
-            */
         }
         //log(TAG, "calculateRank  === nextMv=  "+nextMv +" rank = "+rank ); //+"  returnRankNds= "+ ((ArrayList)returnRankNds.toArray()[0]).toArray().toString());
 
@@ -1055,48 +1213,38 @@ public class MatchSequence implements Runnable   {
 
             for (Iterator<Rank> rankIte = rankList.iterator(); rankIte.hasNext(); ) {
                 Rank rank = rankIte.next();
-               // if (rank.rank == rankVal) {
-                    rankVal = rank.rank;
-                    finalrank = rank;
-                    log(TAG, "predictSingleInput finalrank.rank === " + finalrank.rank);
-                    if (finalrank != null && finalrank.rank >= currentRank) {
-                        //playerAction.setFromNd(finalrank.fromNd);
-                        for (List<Integer> rankListOP : finalrank.rankList) {
-                            for (Integer toNd : rankListOP) { // calculate nd which not there in aList
-                                log(TAG, toNd + " == "+abList.contains(toNd)+ " predictSingleInput isValidSingleInput === " + isValidSingleInput(validNds, toNd));
-                                if ((!abList.contains(toNd)) && isValidSingleInput(validNds, toNd)) {
-                                    playerAction.setToNd(toNd);
-                                    playerAction.setRank(finalrank.rank);
-                                    break;
-                                }
-
+                // if (rank.rank == rankVal) {
+                rankVal = rank.rank;
+                finalrank = rank;
+                log(TAG, "predictSingleInput finalrank.rank === " + finalrank.rank);
+                if (finalrank != null && finalrank.rank >= currentRank) {
+                    //playerAction.setFromNd(finalrank.fromNd);
+                    for (List<Integer> rankListOP : finalrank.rankList) {
+                        for (Integer toNd : rankListOP) { // calculate nd which not there in aList
+                            log(TAG, toNd + " == "+abList.contains(toNd)+ " predictSingleInput isValidSingleInput === " + isValidSingleInput(validNds, toNd));
+                            if ((!abList.contains(toNd)) && isValidSingleInput(validNds, toNd)) {
+                                playerAction.setToNd(toNd);
+                                playerAction.setRank(finalrank.rank);
+                                break;
                             }
+
                         }
-                        //
                     }
-               // }
+                    //
+                }
+                // }
 
                 if (playerAction.getToNd() != null && playerAction.getToNd().intValue() > 0) break; // Come out of the loop
                 if (rankIte.hasNext() == false) { // last object in the list, decrement the rankVal
                     rankVal--;
                 }
             }
-
-
-
         }else{ // first selection
             playerAction.setToNd(Integer.valueOf(randomValueArray(validNds.toArray())));
             playerAction.setRank(-1);
         }
 
         checkOtherPlayerRank(player, playerAction, validNds, -1); // -1 since single input - no from node
-        if(playerAction.getToNd() == null || playerAction.getToNd().intValue() == -1){
-            if(validNds.contains(1)){
-                playerAction.setToNd(1);
-                log(TAG, "predictSingleInput set dafault 1 nd ....Return playerAction == "+playerAction);
-            }
-        }
-
         log(TAG, "predictSingleInput Return playerAction == "+playerAction);
         return playerAction;
     }
@@ -1296,432 +1444,8 @@ public class MatchSequence implements Runnable   {
         return rn.nextInt(9)+1;
     }
 
-    public ActionTakenBean getNextStep(String player) {
 
 
-            // TODO Auto-generated method stub
-            //int[] fromNds = {7, 4, 2};
-        ActionTakenBean playerAction = new ActionTakenBean(player, null, null);
-
-    	/*List<Integer> remainedMoves7 = new ArrayList<Integer>();
-    	remainedMoves7.add(6);
-
-    	List<Integer> remainedMoves4 = new ArrayList<Integer>();
-    	remainedMoves4.add(3);
-
-    	List<Integer> remainedMoves2 = new ArrayList<Integer>();
-    	remainedMoves2.add(9);
-    	remainedMoves2.add(3);*/
-            //TestMatchSequence ms = new TestMatchSequence();
-            //List <List<Integer>> remainedMoves = new ArrayList<List<Integer>>();
-
-            //this.aList.add(7); this.aList.add(4); this.aList.add(2);
-            //this.bList.add(8); this.bList.add(5); this.bList.add(1);
-          //  this.aList.add(2); this.aList.add(8); this.aList.add(1);
-            //this.bList.add(9); this.bList.add(3); this.bList.add(6);
-
-            //this.tList.addAll(this.aList);
-            //this.tList.addAll(this.bList);
-            Set<Integer> bList = this.bList;
-            // A [7, 4, 2]
-            // B [8, 5, 1]
-            // X [3, 6, 9]
-
-            Set<ActionTakenBean> notAllowedNodesList = new HashSet<ActionTakenBean>();
-            List<MyRank> tRanksList = new ArrayList<MyRank>();
-            for(Integer fromNd : bList)
-            {
-                List<Integer>  myremainedMoves = this.remainedMovesList(fromNd, this.tList);
-                Set<Integer> bListOtherNds = new HashSet<Integer>(bList);
-                bListOtherNds.remove(fromNd);
-                for(Integer nextMv : myremainedMoves)
-                {
-                    Set<Integer> tempABListNds = new HashSet<Integer>();
-                    tempABListNds.add(nextMv);
-                    tempABListNds.addAll(bListOtherNds);
-                    List<List<Integer>> returnRankNds = new ArrayList<List<Integer>>();
-                    int rank = this.rank(tempABListNds, returnRankNds);
-                    this.log(TAG, "calculateRank  === fromNd = " + fromNd + " nextMv=  " + nextMv + " rank = " + rank + "  returnRankNds= " + ((ArrayList) returnRankNds.toArray()[0]).toArray().toString());
-
-                    /*****SET RANK *****/
-                    MyRank myRank = new MyRank();
-                    myRank.bList = tempABListNds; // Not sure. Ignore . should not be used.
-                    myRank.aList = this.aList;
-                    myRank.fromNd = fromNd;
-                    myRank.toNd = nextMv;
-                    myRank.rank = rank;
-
-                    if(rank != 3)
-                    {
-                        List<Integer>  tempTListNds = new ArrayList<Integer>();
-                        tempTListNds.addAll(tempABListNds);
-                        tempTListNds.addAll(this.aList);
-
-                        for(Integer tempFrom : this.aList){
-                            List<Integer>  myTempremainedMoves = this.remainedMovesList(tempFrom, tempTListNds);
-                            Set<Integer> aTempListOtherNds = new HashSet<Integer>(this.aList);
-                            aTempListOtherNds.remove(tempFrom);
-                            for(Integer nextTempMv : myTempremainedMoves)
-                            {
-                                Set<Integer> tempNds = new HashSet<Integer>();
-                                tempNds.add(nextTempMv);
-                                tempNds.addAll(aTempListOtherNds);
-                                List<List<Integer>> returnTempRankNds = new ArrayList<List<Integer>>();
-                                int temprank = this.rank(tempNds, returnTempRankNds);
-                                this.log(TAG, "xxcalculateRank  === xxfromNd = " + tempFrom + " xxnextMv=  " + nextTempMv + " xxrank = " + temprank + "  returnRankNds= " + ((ArrayList) returnTempRankNds.toArray()[0]).toArray().toString());
-
-                                MyRank myXXRank = new MyRank();
-                                myXXRank.aList = tempNds;
-                                myXXRank.bList = tempABListNds;
-                                myXXRank.fromNd = tempFrom;
-                                myXXRank.toNd = nextTempMv;
-                                myXXRank.rank = temprank;
-
-
-
-                                // Compute second level ranks for B nodes after A or XX are moved
-                                List<Integer>  tempAATListNds = new ArrayList<Integer>();
-                                tempAATListNds.addAll(tempNds);
-                                tempAATListNds.addAll(tempABListNds);
-
-                                for(Integer tempbFrom : tempABListNds){
-                                    List<Integer>  myBTempremainedMoves = this.remainedMovesList(tempbFrom, tempAATListNds);
-                                    Set<Integer> aTempBListOtherNds = new HashSet<Integer>(tempABListNds);
-                                    aTempBListOtherNds.remove(tempbFrom);
-                                    for(Integer nextBTempMv : myBTempremainedMoves)
-                                    {
-                                        Set<Integer> tempBNds = new HashSet<Integer>();
-                                        tempBNds.add(nextBTempMv);
-                                        tempBNds.addAll(aTempBListOtherNds);
-
-                                        List<List<Integer>> returnTempBRankNds = new ArrayList<List<Integer>>();
-                                        int tempBrank = this.rank(tempBNds, returnTempBRankNds);
-                                        this.log(TAG, "bbcalculateRank  === bbfromNd = " + tempbFrom + " nextBTempMv=  " + nextBTempMv + " tempBrank = " + tempBrank + "  returnRankNds= " + ((ArrayList) returnTempRankNds.toArray()[0]).toArray().toString());
-
-                                        MyRank myABRank = new MyRank();
-                                        myABRank.bList = tempBNds;
-                                        myABRank.aList = tempNds;
-                                        myABRank.fromNd = tempbFrom;
-                                        myABRank.toNd = nextBTempMv;
-                                        myABRank.rank = tempBrank;
-                                        myXXRank.bbRanks.add(myABRank);   // bbRank is a sub list in xxRank
-                                    }
-
-                                } // bbRank End (Current Next ranks)
-
-                                myRank.xxRanks.add(myXXRank);
-
-                            }
-
-                        } // xxRank End
-
-                        tempTListNds.clear();
-                        tempTListNds.addAll(tempABListNds);
-                        tempTListNds.addAll(this.aList);
-
-                        for(Integer tempFrom : tempABListNds){
-                            List<Integer>  myTempremainedMoves = this.remainedMovesList(tempFrom, tempTListNds);
-                            Set<Integer> aTempListOtherNds = new HashSet<Integer>(tempABListNds);
-                            aTempListOtherNds.remove(tempFrom);
-                            for(Integer nextTempMv : myTempremainedMoves)
-                            {
-                                Set<Integer> tempNds = new HashSet<Integer>();
-                                tempNds.add(nextTempMv);
-                                tempNds.addAll(aTempListOtherNds);
-                                List<List<Integer>> returnTempRankNds = new ArrayList<List<Integer>>();
-                                int temprank = this.rank(tempNds, returnTempRankNds);
-                                this.log(TAG, "abcalculateRank  === abfromNd = " + tempFrom + " abnextMv=  " + nextTempMv + " abrank = " + temprank + "  returnRankNds= " + ((ArrayList) returnTempRankNds.toArray()[0]).toArray().toString());
-
-                                MyRank myABRank = new MyRank();
-                                myABRank.bList = tempABListNds;
-                                myABRank.aList = this.aList;
-                                myABRank.fromNd = tempFrom;
-                                myABRank.toNd = nextTempMv;
-                                myABRank.rank = temprank;
-                                myRank.abRanks.add(myABRank);
-                            }
-
-                        } // abRank End (Current Next ranks)
-                    } // rank != 3
-                    tRanksList.add(myRank);
-                }
-            } // end for
-
-            boolean targetFound = false;
-            for(MyRank r : tRanksList){
-                if(r.rank == 3){  // Check Current player , can win in the next step
-                    playerAction.setFromNd(r.fromNd);
-                    playerAction.setToNd(r.toNd);
-                    this.log(TAG, "Main  === HIT AB First level rank = " + playerAction);
-                    targetFound = true;
-                    break;
-                }
-            }
-
-            if(!targetFound) {
-                for(MyRank r : tRanksList){
-
-                    for(MyRank xxR : r.xxRanks){
-                        if(xxR.rank == 3 && !targetFound){ // Other Player about to win. STOP it if possible.
-
-                            for(Integer fromNd : bList)
-                            {
-                                List<Integer>  myremainedMoves = this.remainedMovesList(fromNd, this.tList);
-                                if(myremainedMoves.contains(xxR.toNd))
-                                {
-                                    playerAction.setFromNd(fromNd);
-                                    playerAction.setToNd(xxR.toNd);
-                                    this.log(TAG, "Main  === HIT XX First level rank = " + playerAction);
-                                    targetFound = true;
-                                    break;
-                                }
-                            }
-
-                        }
-                    }
-                }
-            }
-
-            if(!targetFound) {
-                int rank3Cnt = 0;
-                List<MyRank> abRanksList = new ArrayList<MyRank>();
-                for(MyRank r : tRanksList){
-
-                    for(MyRank xxR : r.xxRanks){
-                        for(MyRank bbR : xxR.bbRanks) {
-                            if (bbR.rank == 3) { // Other Player about to win. STOP it if possible.
-                                rank3Cnt++;
-                                abRanksList.add(bbR);
-                            }
-                        }
-                    }
-                }
-    		/* if(rank3Cnt > 1){
-    			 List<Integer>  mostLikelyNds = new ArrayList<Integer>();
-    			 for(MyRank abR : abRanksList){
-
-
-
-		                 for(Integer tempFrom : abR.aList)
-		                 {
-		                	 List<Integer>  tempTListNds = new ArrayList<Integer>();
-			                 tempTListNds.addAll(abR.aList);
-			                 tempTListNds.addAll(abR.bList);
-
-			                 List<Integer>  myTempremainedMoves = this.remainedMovesList(tempFrom, tempTListNds);
-			                 Set<Integer> aTempListOtherNds = new HashSet<Integer>(abR.aList);
-			                 aTempListOtherNds.remove(tempFrom);
-			                 for(Integer nextTempMv : myTempremainedMoves)
-			                 {
-			                	 Set<Integer> tempNds = new HashSet<Integer>();
-			                	 tempNds.add(nextTempMv);
-			                	 tempNds.addAll(aTempListOtherNds);
-			                     List<List<Integer>> returnTempRankNds = new ArrayList<List<Integer>>();
-			                     int temprank = this.rank(tempNds, returnTempRankNds);
-			                     this.log(TAG, "abcalculateRank second level === abfromNd = "+tempFrom +" abnextMv=  "+nextTempMv +" abrank = "+temprank  +"  returnRankNds= "+ ((ArrayList)returnTempRankNds.toArray()[0]).toArray().toString());
-
-			                     tempTListNds.clear();
-				                 tempTListNds.addAll(tempNds);
-				                 tempTListNds.addAll(abR.bList);
-				                 boolean rank3Rec = false;
-				                 for(Integer tempABRFrom : abR.bList){
-					                 List<Integer>  myABRTempremainedMoves = this.remainedMovesList(tempABRFrom, tempTListNds);
-					                 Set<Integer> aTempABRListOtherNds = new HashSet<Integer>(abR.bList);
-					                 aTempABRListOtherNds.remove(tempABRFrom);
-					                 for(Integer nextABRTempMv : myABRTempremainedMoves)
-					                 {
-					                	 Set<Integer> tempABRNds = new HashSet<Integer>();
-					                	 tempABRNds.add(nextABRTempMv);
-					                	 tempABRNds.addAll(aTempABRListOtherNds);
-					                     List<List<Integer>> returnABRTempRankNds = new ArrayList<List<Integer>>();
-					                     int tempABRrank = this.rank(tempABRNds, returnABRTempRankNds);
-					                     this.log(TAG, "abcalculateRank  === tempABRFrom = "+tempABRFrom +" abnextMv=  "+nextABRTempMv +" tempABRrank = "+tempABRrank  +"  returnRankNds= "+ ((ArrayList)returnTempRankNds.toArray()[0]).toArray().toString());
-					                     if(tempABRrank == 3) rank3Rec = true;
-
-					                 }
-
-				                 }
-				                 if(!rank3Rec == true){ // Not find any rank 3 records , that should be ur most bet
-				                	 mostLikelyNds.add(nextTempMv);
-				                 }
-			                 }
-
-		                 }
-    			 }
-    			 // Begin
-    			 for(MyRank r : tRanksList){
-
-        			 for(MyRank abR : r.bbRanks){
-        				 if(abR.rank == 3 ){ // Other Player about to win. STOP it if possible.
-			    			 for(Integer fromNd : bList)
-					    	 {
-					             List<Integer>  myremainedMoves = this.remainedMovesList(fromNd, this.tList);
-					             if(fromNd.equals(abR.fromNd)&& myremainedMoves.contains(abR.toNd)
-					            		 && mostLikelyNds.contains(abR.toNd))
-					             {
-
-					            	 playerAction.setFromNd(fromNd);
-			    	    			 playerAction.setToNd(abR.toNd);
-			    	    			 this.log(TAG, "Main  === HIT AB Second level multiple rank = "+playerAction );
-			    	    			 targetFound = true;
-			    	    			 break;
-					             }
-					    	 }
-        				 }
-        			 }
-    			 }
-    			 // End
-
-    		 }else */
-                this.log(TAG, "getNextStep4 = " + playerAction + " targetFound = "+targetFound);
-                if(!targetFound) {
-                    // Choose B node with , with lower A or xx options.
-                    // Chose B node with A or XX nodes having only winning nodes (Rank 3). If not don't choose ex. Rank 3 B nodes in XX  along with other B nodes
-
-                    for(MyRank r : tRanksList) {
-
-                        for (MyRank xxR : r.xxRanks) {
-
-                            if(xxR.rank == 3){
-                                ActionTakenBean notAllowedBean = new ActionTakenBean(player, r.fromNd, r.toNd);
-                                this.log(TAG, "Not Allowed Node  = " + notAllowedBean);
-                                notAllowedNodesList.add(notAllowedBean);
-                            }
-                            Set<Integer> fromSet = new HashSet<Integer>();
-                            for (MyRank bbR : xxR.bbRanks) {
-                                fromSet.add(bbR.fromNd);
-                                if(bbR.rank == 3){
-
-                                    xxR.xxTobbRank3Cnt++;
-                                }
-                            }
-                            if(fromSet.size() == 1 && fromSet.contains(new Integer(1))){
-                                ActionTakenBean notAllowedBean = new ActionTakenBean(player, r.fromNd, r.toNd);
-                                this.log(TAG, "Not Allowed Node  = " + notAllowedBean);
-                                notAllowedNodesList.add(notAllowedBean);
-                            }
-                        }
-
-                    }
-
-
-                    for(MyRank r : tRanksList) {
-                        if(r.xxRanks.size() == 1 && r.xxRanks.get(0).xxTobbRank3Cnt > 0){
-                            playerAction.setFromNd(r.fromNd);
-                            playerAction.setToNd(r.toNd);
-                            this.log(TAG, "Main  === HIT BB Second level rank , One XXNd with rank3 bbNd = " + playerAction);
-                            if(notAllowedNodesList.contains(playerAction)){
-                                this.log(TAG, " Filter this node 1....... " + playerAction + " targetFound = "+targetFound);
-                                continue;
-                            }
-                            targetFound = true;
-                            break;
-                        }
-                    }
-                    if(!targetFound)
-                    {
-                        this.log(TAG, "getNextStep5 = " + playerAction + " targetFound = "+targetFound);
-                        int leastXXCnt = -1;
-                       // MyRank tempR = null;
-                        boolean playerSelected = false;
-                        TreeSet<Integer> rankSizeSet = new TreeSet<Integer>();
-                        for (MyRank r : tRanksList) {
-                            rankSizeSet.add(r.xxRanks.size());
-
-                        }
-
-                        for (Integer xxsize : rankSizeSet){
-                            if(!playerSelected) {
-                                for (MyRank r : tRanksList) {
-                                    if (xxsize == r.xxRanks.size() && xxsize.equals(r.xxRanks.size())) {
-                                        playerAction.setFromNd(r.fromNd);
-                                        playerAction.setToNd(r.toNd);
-                                        this.log(TAG, " Selecting playerAction ....... " + playerAction + " targetFound = " + targetFound + "  xxsize = "+xxsize);
-                                        playerSelected = true;
-                                        if (notAllowedNodesList.contains(playerAction)) {
-                                            playerSelected = false;
-                                            leastXXCnt = -1;
-                                            this.log(TAG, " Filter this node 2....... " + playerAction + " targetFound = " + targetFound);
-                                            continue;
-
-                                        }
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                        targetFound = true;
-                        /*
-                        for (MyRank r : tRanksList) {
-                            r.xxCnt = r.xxRanks.size();
-
-                            if (leastXXCnt == -1) {
-                                leastXXCnt = r.xxCnt;
-                                playerAction.setFromNd(r.fromNd);
-                                playerAction.setToNd(r.toNd);
-                                playerSelected = true;
-                                if(notAllowedNodesList.contains(playerAction)){
-                                    playerSelected = false;
-                                    leastXXCnt = -1;
-                                    this.log(TAG, " Filter this node 2....... " + playerAction + " targetFound = "+targetFound);
-                                    continue;
-
-                                }
-                                continue;
-                            }
-                            else if (r.xxCnt > leastXXCnt) {
-                                playerSelected = false;
-                                continue;
-                            } else {
-                                playerAction.setFromNd(r.fromNd);
-                                playerAction.setToNd(r.toNd);
-                                playerSelected = true;
-                                this.log(TAG, "Main  === HIT BB Second level rank , select lease XX nodes = " + playerAction);
-                                // break; wait until all iterations...
-                                if(notAllowedNodesList.contains(playerAction)){
-                                    this.log(TAG, " Filter this node ....... " + playerAction + " targetFound = "+targetFound);
-                                    playerSelected = false;
-                                    continue;
-
-                                }
-                            }
-                        }
-                        targetFound = true;
-                        */
-                    }
-
-                    this.log(TAG, "getNextStep6 = " + playerAction + " targetFound = "+targetFound);
-                /*
-                    for(MyRank r : tRanksList){
-
-                        for(MyRank abR : r.bbRanks){
-                            if(abR.rank == 3 ){ // Other Player about to win. STOP it if possible.
-                                for(Integer fromNd : bList)
-                                {
-                                    List<Integer>  myremainedMoves = this.remainedMovesList(fromNd, this.tList);
-                                    if(myremainedMoves.contains(r.toNd))
-                                    {
-
-                                        playerAction.setFromNd(fromNd);
-                                        playerAction.setToNd(r.toNd);
-                                        this.log(TAG, "Main  === HIT AB Second level rank = " + playerAction);
-                                        targetFound = true;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    } */
-                }
-            }
-
-            this.log(TAG, "Main  === playerAction = " + playerAction);
-
-            // this.execute(1, 2);
-            //log(TAG, this.getRandomNum());
-
-        return playerAction;
-    }
 
 
 
