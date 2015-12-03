@@ -2,15 +2,12 @@ package com.innovativemobileapps.ngujjari.squareapp;
 
 import android.app.Activity;
 import android.content.ClipData;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Xml;
 import android.view.DragEvent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -25,16 +22,9 @@ import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlSerializer;
-
-import java.io.EOFException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -674,45 +664,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
     }
 
 
-    public void writeToFile(String vlu)
-    {
 
-        String filename = "file.txt";
-
-        try {
-            FileOutputStream fos;
-
-            fos = openFileOutput(filename, Context.MODE_APPEND);
-
-
-            XmlSerializer serializer = Xml.newSerializer();
-            serializer.setOutput(fos, "UTF-8");
-            serializer.startDocument(null, Boolean.valueOf(true));
-            serializer.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
-
-            serializer.startTag(null, "root");
-
-            for (int j = 0; j < 3; j++) {
-
-                serializer.startTag(null, "record");
-
-                serializer.text(vlu);
-
-                serializer.endTag(null, "record");
-            }
-            serializer.endDocument();
-
-            serializer.flush();
-
-            fos.close();
-        }
-        catch (EOFException eof){
-            Log.v(TAG, "Write file EOF ex .. " + eof);
-        }
-        catch (Exception e){
-            Log.v(TAG, "Write file  ex .. " + e);
-        }
-    }
 
 
 

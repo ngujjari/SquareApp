@@ -1,11 +1,7 @@
 package com.innovativemobileapps.ngujjari.squareapp;
-import android.content.Context;
+
 import android.util.Log;
 
-import com.innovativemobileapps.ngujjari.squareapp.ActionTakenBean;
-
-import java.io.FileOutputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -17,7 +13,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.StringTokenizer;
 import java.util.TreeSet;
 
 /**
